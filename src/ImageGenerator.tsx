@@ -19,7 +19,7 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
     
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("x-freepik-api-key", "FPSXe7fe1516e5294e42bc6624986a516016");
+    myHeaders.append("x-freepik-api-key", import.meta.env.FREE_PICK_APIKey);
 
     const raw = JSON.stringify({
       "prompt": prompt,
