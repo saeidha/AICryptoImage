@@ -12,7 +12,8 @@ const App: React.FC = () => {
   const { writeContract } = useWriteContract();
 
   // Replace with your contract address
-  const contractAddress = '0xa66EddcB5E4662Bc2b7DEA8380C5D1102856c1b1';
+  const contractAddress = import.meta.env.CONTRACT_ADDREESS;
+
 
   // Define the minting parameters
   const [uri, setUri] = useState<string | null>(null);
