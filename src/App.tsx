@@ -11,10 +11,7 @@ const App: React.FC = () => {
   const { writeContract } = useWriteContract();
 
   // Replace with your contract address
-  const contractAddress = import.meta.env.CONTRACT_ADDREESS;
-  if (!contractAddress) {
-  throw new Error('VITE_FREE_PICK_API_KEY is not defined');
-  }
+  const contractAddress = import.meta.env.VITE_CONTRACT_ADDREESS;
   // Define the minting parameters
   const [uri, setUri] = useState<string | null>(null);
   const name = 'Your NFT Name';
