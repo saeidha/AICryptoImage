@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import { useAccount, useConnect, useDisconnect, useWriteContract } from 'wagmi';
 import { abi } from './abi'; // Ensure that you import your contract ABI
+import ImageGenerator from './ImageGenerator';
 
-const YourComponent: React.FC = () => {
+
+
+const App: React.FC = () => {
   const account = useAccount();
   const { connectors, connect, status, error } = useConnect();
   const { disconnect } = useDisconnect();
   const { writeContract } = useWriteContract();
 
   // Replace with your contract address
-  const contractAddress = '0x52E7D909Fcb558FcfC508D14F969D021F11dC92f';
+  const contractAddress = '0xa66EddcB5E4662Bc2b7DEA8380C5D1102856c1b1';
 
   // Define the minting parameters
-  const uri = 'ipfs://bafybeihzltmlvfqh7mrvvpbclk3tuenaqchz5xapmw46ttx5amw4psw4mi';
+  const [uri, setUri] = useState<string | null>(null);
   const name = 'Your NFT Name';
   const description = 'Your NFT Description';
 
@@ -22,18 +25,25 @@ const YourComponent: React.FC = () => {
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    if (!uri) {
+      console.error('No account connected');
+      return;
+    }
+    
     // Check if the account is connected
     if (!account.address) {
       console.error('No account connected');
       return;
     }
 
+    
+
     // Call the writeContract function
     try {
       const tx = await writeContract({
         address: contractAddress,
         abi: abi,
-        functionName: 'mintNFT', // Ensure this function can handle multiple mints
+        functionName: 'mintNFTs', // Ensure this function can handle multiple mints
         args: [account.address, BigInt(quantity), uri, name, description], // Pass quantity as an argument
       });
 
@@ -45,6 +55,8 @@ const YourComponent: React.FC = () => {
 
   return (
     <div>
+      <ImageGenerator onUriSet={setUri} />
+
       <form onSubmit={submit}>
         <label>
           Number of NFTs to mint:
@@ -67,7 +79,7 @@ const YourComponent: React.FC = () => {
         chainId: {account.chainId}
       </div>
 
-      {account.status === 'connected' && (
+      {account.status === "connected" && (
         <button type="button" onClick={() => disconnect()}>
           Disconnect
         </button>
@@ -91,4 +103,4 @@ const YourComponent: React.FC = () => {
   );
 };
 
-export default YourComponent;
+export default App;
