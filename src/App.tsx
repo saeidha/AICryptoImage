@@ -4,7 +4,6 @@ import { abi } from './abi'; // Ensure that you import your contract ABI
 import ImageGenerator from './ImageGenerator';
 
 
-
 const App: React.FC = () => {
   const account = useAccount();
   const { connectors, connect, status, error } = useConnect();
@@ -13,8 +12,9 @@ const App: React.FC = () => {
 
   // Replace with your contract address
   const contractAddress = import.meta.env.CONTRACT_ADDREESS;
-
-
+  if (!contractAddress) {
+  throw new Error('VITE_FREE_PICK_API_KEY is not defined');
+  }
   // Define the minting parameters
   const [uri, setUri] = useState<string | null>(null);
   const name = 'Your NFT Name';
