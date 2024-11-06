@@ -1,0 +1,43 @@
+/* ParallaxComponent.css */
+
+.parallax-container {
+    text-align: center;
+    padding-top: 15%;
+  }
+  
+  .typed-text {
+    font-family: 'Open Sans', sans-serif; /* Change to Open Sans */
+    font-size: 36px; /* Change to your desired font size */
+    color: white; /* Change to your desired text color */
+  }
+  
+  .mint-app {
+    background-color: black;
+    padding-top: 5%;
+  }
+  
+  .background-layer {
+    background-color: rgba(19, 19, 19, 0.5); /* Semi-transparent black */
+    width: 100%; /* Ensures the layer takes full width */
+    height: 100%; /* Ensures the layer takes full height */
+    position: absolute; /* Positions it properly within the parallax layer */
+    top: 0; /* Aligns it to the top */
+    left: 0; /* Aligns it to the left */
+    z-index: -1; /* Places it behind other content */
+
+    /* Blur effect */
+    filter: blur(8px); /* Adjust the blur amount as needed */
+  }
+
+ 
+.logo {
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically if needed */
+    height: 50vh; /* Make the logo container full height of the viewport */
+  }
+  
+  .logo img {
+    max-width: 40%; /* Make sure the logo is responsive */
+    height: auto; /* Maintain aspect ratio */
+  }

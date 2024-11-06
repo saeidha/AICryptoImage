@@ -1,34 +1,33 @@
-// ParallaxComponent.tsx
 import React from 'react';
 import { Parallax, ParallaxLayer } from '@react-spring/parallax';
-import bgImage from '../bg.jpg'; // Import your background image
-
+import { ReactTyped } from 'react-typed'; // Correct import
+import './ParallaxComponent.css'; // Import the CSS file
+import MintApp from '../MintApp/MintApp'; // Import the Parallax component
+import logo from '../images/logo.png';
 const ParallaxComponent: React.FC = () => {
   return (
     <Parallax pages={2} style={{ top: '0', left: '0' }}>
-      {/* Background Layer */}
-      <ParallaxLayer
-        offset={0}
-        speed={0.5}
-        style={{
-          backgroundImage: `url(${bgImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      />
+      <ParallaxLayer offset={0} speed={0.5} className="background-layer" />
 
-      {/* Content Layer */}
       <ParallaxLayer offset={0} speed={1}>
-        <div style={{ textAlign: 'center', color: 'white', paddingTop: '20%' }}>
-          <h1>Welcome to the NFT Minting App</h1>
+      
+      <div className="logo">
+        <img src={logo} alt="logo" />
+        </div>
+        <div className="parallax-container">
+          
+          <ReactTyped
+            strings={['Welcome to the NFT Minting App']}
+            typeSpeed={60}
+            backSpeed={40}
+            loop
+            className="typed-text" // Apply the CSS class
+          />
         </div>
       </ParallaxLayer>
 
-      {/* Additional Layer for scrolling */}
       <ParallaxLayer offset={1} speed={1}>
-        <div style={{ textAlign: 'center', color: 'black', paddingTop: '20%' }}>
-          <h2>Scroll Down for More Content</h2>
-        </div>
+          <MintApp />
       </ParallaxLayer>
     </Parallax>
   );
