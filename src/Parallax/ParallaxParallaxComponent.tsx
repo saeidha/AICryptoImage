@@ -17,7 +17,7 @@ const ParallaxComponent: React.FC = () => {
         <div className="parallax-container">
           
           <ReactTyped
-            strings={['Welcome to the NFT Minting App']}
+            strings={['Welcome to the AI NFT Generator On Chain App']}
             typeSpeed={60}
             backSpeed={40}
             loop
