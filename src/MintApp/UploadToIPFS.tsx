@@ -1,6 +1,6 @@
 // UploadToIPFS.tsx
 import React, { useState } from 'react';
-import { pinata } from './utils/config'; // Ensure this is the correct path to your Pinata configuration
+import { pinata } from '../utils/config'; // Ensure this is the correct path to your Pinata configuration
 
 interface UploadToIPFSProps {
   base64Image: string | null;
