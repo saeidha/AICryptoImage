@@ -19,38 +19,21 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
     
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("x-freepik-api-key", import.meta.env.VITE_FREE_PICK_API_KEY);
-
-    const raw = JSON.stringify({
-      "prompt": prompt,
-      "negative_prompt": "b&w, earth, cartoon, ugly",
-      "guidance_scale": 2,
-      "seed": 42,
-      "num_images": 1,
-      "image": {
-        "size": "square_1_1"
-      },
-      "styling": {
-        "style": "digital-art",
-        "color": "electric",
-        "lightning": "warm",
-        "framing": "portrait"
-      }
-    });
 
     const requestOptions = {
-      method: "POST",
+      method: "GET",
       headers: myHeaders,
-      body: raw,
-      redirect: "follow" as RequestRedirect,
     };
 
     try {
-      const response = await fetch("https://api.freepik.com/v1/ai/text-to-image", requestOptions);
-      const result = await response.json();
-
-      if (response.ok && result.data && result.data.length > 0) {
-        setBase64Image(result.data[0].base64);
+      const response = await fetch(`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`, requestOptions);
+      if (response.ok) {
+        const blob = await response.blob();
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setBase64Image(reader.result as string);
+        };
+        reader.readAsDataURL(blob);
       } else {
         setError('Failed to generate image');
       }
@@ -64,7 +47,8 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
 
   return (
     <div>
-      <input type="text"
+      <input
+        type="text"
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
         placeholder="Enter your prompt"
@@ -75,8 +59,8 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {base64Image && (
         <div>
-          <img src={`data:image/png;base64,${base64Image}`} alt="Generated" />
-          <UploadToIPFS base64Image={base64Image} onUploadSuccess={onUriSet} />
+          <img src={base64Image} alt="Generated" />
+          <UploadToIPFS base64Image={base64Image.split(",")[1]} onUploadSuccess={onUriSet} />
         </div>
       )}
     </div>
