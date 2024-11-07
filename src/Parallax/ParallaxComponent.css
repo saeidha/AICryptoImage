@@ -2,7 +2,7 @@
 
 .parallax-container {
     text-align: center;
-    padding-top: 15%;
+    padding-top: 5%;
   }
   
   .typed-text {
@@ -40,4 +40,11 @@
   .logo img {
     max-width: 40%; /* Make sure the logo is responsive */
     height: auto; /* Maintain aspect ratio */
+  }
+
+  .launch-app {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
   }

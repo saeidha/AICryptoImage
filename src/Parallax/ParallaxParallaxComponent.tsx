@@ -2,8 +2,8 @@ import React from 'react';
 import { Parallax, ParallaxLayer } from '@react-spring/parallax';
 import { ReactTyped } from 'react-typed'; // Correct import
 import './ParallaxComponent.css'; // Import the CSS file
-import MintApp from '../MintApp/MintApp'; // Import the Parallax component
 import logo from '../images/logo.png';
+import { Link } from 'react-router-dom';
 const ParallaxComponent: React.FC = () => {
   return (
     <Parallax pages={2} style={{ top: '0', left: '0' }}>
@@ -24,10 +24,17 @@ const ParallaxComponent: React.FC = () => {
             className="typed-text" // Apply the CSS class
           />
         </div>
+
+        <div className="launch-app">
+        <button style={{ padding: '10px', background: '#007bff', color: 'white', border: 'none', borderRadius: '5px' }}>
+                <Link to="/mint" style={{ textDecoration: 'none', color: 'black' }}>
+                    <i className="fas fa-rocket"></i> Mint App
+                </Link>
+            </button>
+            </div>
       </ParallaxLayer>
 
       <ParallaxLayer offset={1} speed={1}>
-          <MintApp />
       </ParallaxLayer>
     </Parallax>
   );
