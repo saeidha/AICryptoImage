@@ -1,7 +1,7 @@
 // ImageGenerator.tsx
 import React, { useState } from 'react';
 import UploadToIPFS from './UploadToIPFS'; // Ensure this is the correct import path
-import { useWriteContract } from 'wagmi';
+import { useAccount, useWriteContract } from 'wagmi';
 import { abi } from '../generateImageAbi'; // Ensure that you import your contract ABI
 
 interface ImageGeneratorProps {
@@ -14,11 +14,17 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const { writeContract } = useWriteContract();
+  const account = useAccount();
 
 
 
 const pay = async () => {
-  const valueInWei = BigInt(0.007 * 10 ** 18); // Convert 0.007 ETH to Wei
+
+  if (!account.address) {
+    console.error('No account connected');
+    return;
+  }
+  const valueInWei = BigInt(0.0007 * 10 ** 18); // Convert 0.007 ETH to Wei
   try {
     const tx = await writeContract({
       address: '0x69c4893Fbb213e7082180E619D03ccAF7808e52C',
@@ -72,11 +78,11 @@ const pay = async () => {
 
 
   const handleSubmit = async () => {
-    // const tx = await pay(); // Call the pay function
-    // if (tx) {
+     const tx = await pay(); // Call the pay function
+    if (tx) {
       
       await generateImage(); // Call the generateImage function if payment was successful
-    // }
+    }
     setPrompt('');
   };
 
