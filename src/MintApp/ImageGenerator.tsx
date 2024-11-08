@@ -1,6 +1,8 @@
 // ImageGenerator.tsx
 import React, { useState } from 'react';
 import UploadToIPFS from './UploadToIPFS'; // Ensure this is the correct import path
+import { useWriteContract } from 'wagmi';
+import { abi } from '../generateImageAbi'; // Ensure that you import your contract ABI
 
 interface ImageGeneratorProps {
   onUriSet: (uri: string) => void; // Prop to set the URI
@@ -11,6 +13,28 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
   const [base64Image, setBase64Image] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const { writeContract } = useWriteContract();
+
+
+
+const pay = async () => {
+  const valueInWei = BigInt(0.007 * 10 ** 18); // Convert 0.007 ETH to Wei
+  try {
+    const tx = await writeContract({
+      address: '0x69c4893Fbb213e7082180E619D03ccAF7808e52C',
+      abi: abi,
+      functionName: 'pay',
+      value: valueInWei,
+    });
+    console.log('Transaction:', tx);
+    return tx;
+  } catch (error) {
+    console.error('Error writing contract:', error);
+    setError('Transaction failed');
+    return null;
+  }
+};
+
 
   const generateImage = async () => {
     setLoading(true);
@@ -45,6 +69,18 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
     }
   };
 
+
+
+  const handleSubmit = async () => {
+    // const tx = await pay(); // Call the pay function
+    // if (tx) {
+      
+      await generateImage(); // Call the generateImage function if payment was successful
+    // }
+    setPrompt('');
+  };
+
+
   return (
     <div>
       <input
@@ -53,7 +89,7 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
         onChange={(e) => setPrompt(e.target.value)}
         placeholder="Enter your prompt"
       />
-      <button onClick={generateImage} disabled={loading}>
+      <button onClick={handleSubmit} disabled={loading}>
         {loading ? 'Generating...' : 'Generate Image'}
       </button>
       {error && <p style={{ color: 'red' }}>{error}</p>}

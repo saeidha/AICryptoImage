@@ -4,7 +4,7 @@ import { useAccount, useConnect, useDisconnect, useWriteContract } from 'wagmi';
 import { abi } from '../abi'; // Ensure that you import your contract ABI
 import ImageGenerator from './ImageGenerator';
 import TabBar from '../Tabbar/TabBar';
-
+import './MintApp.css'
 const MintApp: React.FC = () => {
   const account = useAccount();
   const { connectors, connect, status, error } = useConnect();
@@ -45,9 +45,9 @@ const MintApp: React.FC = () => {
   }
 
   return (
-    <div>
-
+    <div className="base-container">
       <TabBar />
+      <div className="container">
       <ImageGenerator onUriSet={setUri} />
 
       <form onSubmit={submit}>
@@ -91,6 +91,7 @@ const MintApp: React.FC = () => {
         ))}
         <div>{status}</div>
         <div>{error?.message}</div>
+      </div>
       </div>
     </div>
   );
