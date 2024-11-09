@@ -1,9 +1,10 @@
 // ImageGenerator.tsx
 import React, { useState } from 'react';
 import UploadToIPFS from './UploadToIPFS'; // Ensure this is the correct import path
-import { useAccount, useWriteContract } from 'wagmi';
+import { useAccount } from 'wagmi';
+import { simulateContract, writeContract } from '@wagmi/core'
 import { abi } from '../generateImageAbi'; // Ensure that you import your contract ABI
-
+import { config } from '../wagmi'
 interface ImageGeneratorProps {
   onUriSet: (uri: string) => void; // Prop to set the URI
 }
@@ -13,7 +14,7 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
   const [base64Image, setBase64Image] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const { writeContract } = useWriteContract();
+  // const { writeContract } = useWriteContract();
   const account = useAccount();
 
 
@@ -26,14 +27,21 @@ const pay = async () => {
   }
   const valueInWei = BigInt(0.0007 * 10 ** 18); // Convert 0.007 ETH to Wei
   try {
-    const tx = await writeContract({
+    // Simulate the contract call to check if it will succeed
+    const { request } = await simulateContract(config, {
+      abi,
       address: '0x69c4893Fbb213e7082180E619D03ccAF7808e52C',
-      abi: abi,
       functionName: 'pay',
+      args: [], // Add any necessary arguments for the 'pay' function here
       value: valueInWei,
     });
-    console.log('Transaction:', tx);
-    return tx;
+    // Proceed to write the contract if simulation succeeded
+    console.log('Simulation succeeded, proceeding with transaction.');
+
+    const hash = await writeContract(config, request)
+    // Optionally, you can wait for the transaction receipt if needed
+    console.log('Transaction sent, hash:', hash);
+    return true;
   } catch (error) {
     console.error('Error writing contract:', error);
     setError('Transaction failed');
