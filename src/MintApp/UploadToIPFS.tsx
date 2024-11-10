@@ -1,6 +1,21 @@
 // UploadToIPFS.tsx
 import React, { useState } from 'react';
 import { pinata } from '../utils/config'; // Ensure this is the correct path to your Pinata configuration
+import { createTheme, alpha, getContrastRatio } from '@mui/material/styles';
+
+const violetBase = '#7F00FF';
+const violetMain = alpha(violetBase, 0.7);
+
+const theme = createTheme({
+  palette: {
+    violet: {
+      main: violetMain,
+      light: alpha(violetBase, 0.5),
+      dark: alpha(violetBase, 0.9),
+      contrastText: getContrastRatio(violetMain, '#fff') > 4.5 ? '#fff' : '#111',
+    },
+  },
+});
 
 interface UploadToIPFSProps {
   base64Image: string | null;
@@ -53,12 +68,13 @@ const UploadToIPFS: React.FC<UploadToIPFSProps> = ({ base64Image, onUploadSucces
       setError('Failed to upload to IPFS');
     } finally {
       setLoading(false);
+      
     }
   };
 
   return (
     <div>
-      <button onClick={handleSubmission} disabled={loading}>
+      <button className="btn btn-purple mt-3" onClick={handleSubmission} disabled={loading}>
         {loading ? 'Uploading...' : 'Upload to IPFS'}
       </button>
       {error && <p style={{ color: 'red' }}>{error}</p>}

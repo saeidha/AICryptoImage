@@ -1,20 +1,24 @@
 .nav {
-    border-radius: 10px;
-    background-color: #000000d0;
-    color: #ffffff;
     height: 100px;
     display: flex; /* Use flexbox to layout the child elements */
     align-items: center; /* Center child elements vertically */
     justify-content: space-between; /* Space out the child elements */
-    padding: 0 20px; /* Add padding to the left and right */
+    padding: 0px 30px; /* Add padding to the left and right */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Open Sans", serif;
   }
   
   .brand {
     display: flex;
     align-items: center;
+    font-family: "Open Sans", serif;
   }
   .brandName{
     font-size: 1rem;
+    font-weight: 800;
+    font-family: "Open Sans", serif;
   }
   
   .logo {
@@ -31,6 +35,7 @@
     margin: 0;
     padding-right: 10px;
     padding-left: 40px;
+    font-family: "Open Sans", serif;
   }
   
   .nav-text {
@@ -38,22 +43,27 @@
     text-decoration: none;
     color: #ffffff;
     font-size: 1rem;
+    font-family: "Open Sans", serif;
     
   }
   
   a {
     text-decoration: none;
     color: #ffffff;
-    font-weight: 800;
+    font-weight: 600;
+    font-family: "Open Sans", serif;
   }
   
   a:hover {
     text-decoration: none;
     color: #ffffff;
+    font-family: "Open Sans", serif;
   }
   
   .button-container {
-    margin-left: auto; /* Push button to the right */
+    display: flex;
+  justify-content: center;
+  font-family: "Open Sans", serif;
   }
   
   .button {
@@ -62,8 +72,5 @@
     color: white;
     border: none;
     cursor: pointer;
+    font-family: "Open Sans", serif;
   }
-
-.header {
-    padding: 40px;
-}

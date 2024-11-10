@@ -8,7 +8,7 @@ const TabBar: React.FC = () => {
         <nav className="nav">
           <div className="brand">
             <img src="../logo.png" className="logo" />
-            <h3 className="brandName">AI NFT Generator</h3>
+            <div className="brandName">AI NFT Generator</div>
           </div>
 
           <ul className="nav_link">
@@ -20,10 +20,10 @@ const TabBar: React.FC = () => {
                 color: "black",
               }}
             >
-              <i className="nav-text">Home</i> 
+              <div className="nav-text">Home</div> 
             </Link>
             <Link to="/mint" style={{ textDecoration: "none", color: "black" }}>
-              <i className="nav-text">Mint App</i> 
+            <div className="nav-text">Mint App</div>
             </Link>
           </ul>
           <div className="button-container">

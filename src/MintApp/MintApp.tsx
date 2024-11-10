@@ -48,6 +48,7 @@ const MintApp: React.FC = () => {
     <div className="base-container">
       <TabBar />
       <div className="container">
+      <span>The Home</span>
       <ImageGenerator onUriSet={setUri} />
 
       <form onSubmit={submit}>
