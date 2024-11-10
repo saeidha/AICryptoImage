@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ParallaxComponent from './Parallax/ParallaxParallaxComponent';
-import MintApp from './SignUp'; // Import the LaunchApp component
+import MintApp from './MintApp/MintApp'; // Import the LaunchApp component
 import { StyledEngineProvider } from '@mui/material/styles';
 
 

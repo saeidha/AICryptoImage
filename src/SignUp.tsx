@@ -16,9 +16,8 @@ import { styled } from '@mui/material/styles';
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
 import AppTheme from './theme/AppTheme';
 
-
-import logo from './images/logo.png';
 import PromptForm from './MintApp/Promp';
+import logo from './images/logo-mini.svg';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -124,7 +123,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
       <CssBaseline enableColorScheme />
       <SignInContainer direction="column" justifyContent="space-between">
         <Card variant="outlined" sx={{ minWidth: 1000, maxWidth: 1000 }}>
-          <SitemarkIcon />
+        <img src={logo} width={'50px'} height={'50px'} />
           <Typography
             component="h1"
             variant="h4"
