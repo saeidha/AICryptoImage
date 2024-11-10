@@ -22,7 +22,7 @@ const TabBar: React.FC = () => {
             >
               <div className="nav-text">Home</div> 
             </Link>
-            <Link to="/mint" style={{ textDecoration: "none", color: "black" }}>
+            <Link to="/signup" style={{ textDecoration: "none", color: "black" }}>
             <div className="nav-text">Mint App</div>
             </Link>
           </ul>

@@ -15,7 +15,10 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
 import AppTheme from './theme/AppTheme';
-import ColorModeSelect from './theme/ColorModeSelect';
+
+
+import logo from './images/logo.png';
+import PromptForm from './MintApp/Promp';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -65,6 +68,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
+  const [prompt, setPrompt] = React.useState<string>('');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -113,21 +117,27 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     return isValid;
   };
 
+  
+
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
       <SignInContainer direction="column" justifyContent="space-between">
-        <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
-        <Card variant="outlined">
+        <Card variant="outlined" sx={{ minWidth: 1000, maxWidth: 1000 }}>
           <SitemarkIcon />
           <Typography
             component="h1"
             variant="h4"
             sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
           >
-            Sign in
+            AI NFT Generator
           </Typography>
-          <Box
+
+          <PromptForm 
+        sendPrompt={handleSubmit} 
+        prompt={prompt} 
+        setPrompt={setPrompt}/>
+          {/* <Box
             component="form"
             onSubmit={handleSubmit}
             noValidate
@@ -177,7 +187,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            {/* <ForgotPassword open={open} handleClose={handleClose} /> */}
+            
             <Button
               type="submit"
               fullWidth
@@ -224,7 +234,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                 Sign up
               </Link>
             </Typography>
-          </Box>
+          </Box> */}
         </Card>
       </SignInContainer>
     </AppTheme>
