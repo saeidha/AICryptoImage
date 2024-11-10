@@ -2,13 +2,13 @@
 
 .parallax-container {
     text-align: center;
-    padding-top: 5%;
+    /* padding-top: 15%; */
   }
   
   .typed-text {
     font-family: 'Open Sans', sans-serif; /* Change to Open Sans */
-    font-size: 36px; /* Change to your desired font size */
-    color: white; /* Change to your desired text color */
+    font-size: 28px; /* Change to your desired font size */
+    color: #bdddf5;; /* Change to your desired text color */
   }
   
   .mint-app {
@@ -34,11 +34,12 @@
     display: flex; /* Use flexbox for alignment */
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically if needed */
-    height: 50vh; /* Make the logo container full height of the viewport */
+    /* height: 50vh; */
+    /* padding-top: 5%; */
   }
   
   .logo img {
-    max-width: 40%; /* Make sure the logo is responsive */
+    max-width: 60%; /* Make sure the logo is responsive */
     height: auto; /* Maintain aspect ratio */
   }
 
@@ -46,5 +47,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 100px;
+    margin-top: 76px;
+  }
+
+  .launch-app button {
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 180px;
   }

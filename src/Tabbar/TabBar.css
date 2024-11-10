@@ -22,10 +22,6 @@
     font-family: "Open Sans", serif;
   }
   
-  .logo {
-    height: 50px;
-  }
-  
   .nav_link {
   
     display: flex; /* Use flexbox to layout the links */
