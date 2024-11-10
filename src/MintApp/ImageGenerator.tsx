@@ -133,8 +133,9 @@ const pay = async () => {
  */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
       <div className="image-container">
-      <img src='../logo.png' alt="Generated" />
-    
+      <img src='../temp.png' alt="Generated" />
+      </div>
+      
       <div className="button-container">
       <Stack spacing={2} direction="row">
       <UploadToIPFS base64Image={'base64Image'.split(",")[1]} onUploadSuccess={onUriSet} />
@@ -143,7 +144,6 @@ const pay = async () => {
       </Stack>
     </div>
     
-  </div>
 </Modal>
 
 

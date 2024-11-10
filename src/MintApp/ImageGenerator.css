@@ -3,21 +3,25 @@
     position: relative;
     padding-bottom: 66.67%; /* 2/3 aspect ratio */
     overflow: hidden;
+    /* border: 5px solid #007bff; */
+    border-radius: 4px; /* Optional: rounded corners */
+    top: 37px;
+    height: 500px;
 }
 
 .image-container img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 90%;
-    object-fit: cover;
+    position: absolute; /* Position absolutely within the container */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    width: 100%; /* Full width of the container */
+    height: 100%; /* Full height of the container */
+    object-fit: cover; /* Cover the entire container while maintaining aspect ratio */
 }
 
 
 .button-container {
     position: absolute;
-    bottom: 0;
+    bottom: 11px;
     left: 0;
     width: 100%;
     display: flex;

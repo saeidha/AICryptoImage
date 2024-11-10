@@ -16,12 +16,13 @@
   
   /* Modal content styles */
   .modal-content {
-    background-color: rgb(32, 30, 30); /* White background for the modal */
+    background-color: #0f1214; /* White background for the modal */
     border-radius: 8px; /* Rounded corners */
     padding: 20px; /* Padding inside the modal */
-    width: 65%; /* Fixed width */
+    width: 550px; /* Fixed width */
     /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) */
     position: relative; /* Positioning for close button */
+    height: 660px;
   }
   
   /* Close button styles */
