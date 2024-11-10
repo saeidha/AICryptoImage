@@ -6,10 +6,10 @@ const TabBar: React.FC = () => {
     return (
       <header className="header">
         <nav className="nav">
-          <div className="brand">
+          {/* <div className="brand">
             <img src="../logo.png" className="logo" />
             <div className="brandName">AI NFT Generator</div>
-          </div>
+          </div> */}
 
           <ul className="nav_link">
             <Link
@@ -26,9 +26,7 @@ const TabBar: React.FC = () => {
             <div className="nav-text">Mint App</div>
             </Link>
           </ul>
-          <div className="button-container">
-            <WalletComponents />
-          </div>
+          <WalletComponents />
         </nav>
       </header>
     );
