@@ -7,6 +7,7 @@ import TabBar from "../Tabbar/TabBar";
 import "./MintApp.css";
 import GeneratedModal from "../Modal/GeneratedModal/GeneratedModal";
 
+
 // import Box from '@mui/material/Box';
 // import Button from '@mui/material/Button';
 // import Checkbox from '@mui/material/Checkbox';
