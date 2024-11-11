@@ -25,4 +25,3 @@ export const abi = [
     "type": "function"
   }
 ] as const;
-  

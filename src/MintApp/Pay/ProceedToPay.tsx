@@ -16,7 +16,7 @@ export const useProceedToPay = () => {
       return;
     }
 
-    const valueInWei = BigInt(0.0007 * 10 ** 18); // Convert 0.007 ETH to Wei
+    const valueInWei = BigInt(Math.floor(0.00007 * 10 ** 18)); // Convert 0.0007 ETH to Wei
 
     try {
       // Simulate the contract call to check if it will succeed
