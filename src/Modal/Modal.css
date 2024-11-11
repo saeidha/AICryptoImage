@@ -1,41 +1,25 @@
-/* Modal.css */
+.image-container {
+  width: 100%;
+  position: relative;
+  padding-bottom: 66.67%; /* 2/3 aspect ratio */
+  overflow: hidden;
+  /* border: 5px solid #007bff; */
+  border-radius: 4px; /* Optional: rounded corners */
+  height: 500px;
+}
 
-/* Overlay styles */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Ensure it appears above other content */
-  }
-  
-  /* Modal content styles */
-  .modal-content {
-    background-color: #0f1214; /* White background for the modal */
-    border-radius: 8px; /* Rounded corners */
-    padding: 20px; /* Padding inside the modal */
-    width: 550px; /* Fixed width */
-    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) */
-    position: relative; /* Positioning for close button */
-    height: 660px;
-  }
-  
-  /* Close button styles */
-  .modal-close {
-    position: absolute; /* Positioning relative to modal content */
-    top: 10px; /* Distance from top */
-    right: 10px; /* Distance from right */
-    background-color: transparent; /* Transparent background */
-    border: none; /* No border */
-    font-size: 16px; /* Font size */
-    cursor: pointer; /* Pointer cursor on hover */
-  }
-  
-  .close-icon {
-    filter: invert(45%) sepia(100%) saturate(0%) hue-rotate(200deg) brightness(90%) contrast(100%);
-  }
+.image-container img {
+  position: absolute; /* Position absolutely within the container */
+  top: 0; /* Align to the top */
+  left: 0; /* Align to the left */
+  width: 100%; /* Full width of the container */
+  height: 100%; /* Full height of the container */
+  object-fit: cover; /* Cover the entire container while maintaining aspect ratio */
+}
+
+.button-container button {
+  color: white;
+  border: none; 
+  padding: 0 20px;
+  cursor: pointer;
+}

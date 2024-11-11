@@ -1,29 +1,76 @@
-import React from 'react';
-import './Modal.css'; // Ensure you have the CSS file for styling
-import closeIcon from '../images/close.svg'; // Adjust the path as necessary
-
-interface ModalProps {
-  isOpen: boolean; // Control the visibility of the modal
-  onClose: () => void; // Function to close the modal
-  children: React.ReactNode; // Content to display inside the modal
-}
-
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null; // Don't render anything if the modal is not open
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-      <img 
-      className="close-icon"
-      src={closeIcon} // Replace with your close image path
-      style={{ cursor: 'pointer', width: '30px', height: '30px', position: 'absolute', top: '10px', right: '10px', fill: 'white' }} // Adjust size and position as needed
-      onClick={onClose} // Call the onClose function when clicked
-    />
-        {children}
-      </div>
-    </div>
-  );
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Button from '@mui/material/Button';
+import Stack from "@mui/material/Stack";
+import UploadToIPFS from "../MintApp/UploadToIPFS";
+import Typography from "@mui/material/Typography";
+import './Modal.css'
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
 };
 
-export default Modal;
+interface NestedModalProps {
+  onUriSet: (uri: string) => void;
+}
+
+export default function NestedModal({ onUriSet }: NestedModalProps) {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div>
+      <Button onClick={handleOpen}>Open modal</Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        
+        
+        <Box sx={{ ...style, width: 500 }}>
+          
+        <Stack spacing={2}>
+        <Typography
+            component="h1"
+            variant="h4"
+            sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)", textAlign: "center" }}
+          >
+            Generated NFT
+          </Typography>
+
+          <div className="image-container">
+      <img src='../temp.png' alt="Generated" />
+      </div>
+      
+      <div className="button-container">
+      <Stack spacing={2} direction="row" sx={{height: "80px", width: "100%"}}>
+      <UploadToIPFS base64Image={'base64Image'.split(",")[1]} onUploadSuccess={onUriSet} />
+      <UploadToIPFS base64Image={'base64Image'.split(",")[1]} onUploadSuccess={onUriSet} />
+      <UploadToIPFS base64Image={'base64Image'.split(",")[1]} onUploadSuccess={onUriSet} />
+      </Stack>
+    </div>
+
+    </Stack>
+
+        </Box>
+      </Modal>
+    </div>
+  );
+}

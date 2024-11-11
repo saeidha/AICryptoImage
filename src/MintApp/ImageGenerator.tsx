@@ -1,12 +1,11 @@
 // ImageGenerator.tsx
 import React, { useState } from "react";
-import UploadToIPFS from "./UploadToIPFS"; // Ensure this is the correct import path
+// import UploadToIPFS from "./UploadToIPFS"; // Ensure this is the correct import path
 import { useAccount } from "wagmi";
 import { simulateContract, writeContract } from "@wagmi/core";
 import { abi } from "../generateImageAbi"; // Ensure that you import your contract ABI
 import { config } from "../wagmi";
-import Modal from "../Modal/Modal"; // Import the Modal component
-import "./ImageGenerator.css";
+// import Modal from "../Modal/Modal"; // Import the Modal component
 import PromptForm from "./Promp"
 interface ImageGeneratorProps {
   onUriSet: (uri: string) => void; // Prop to set the URI
@@ -17,7 +16,6 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
   const [base64Image, setBase64Image] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // State to control modal visibility
 
   // const { writeContract } = useWriteContract();
   const account = useAccount();
@@ -102,37 +100,25 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
         prompt={prompt}
         setPrompt={setPrompt}
       />
-      <button onClick={() => setIsModalOpen(true)}>Open Image Generator</button>
 
       {loading ? "Generating..." : "Generate Image"}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {base64Image && (
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <div>
-            <img src={base64Image} alt="Generated" className="image" />
-            <UploadToIPFS
-              base64Image={base64Image.split(",")[1]}
-              onUploadSuccess={onUriSet}
-            />
-          </div>
-        </Modal>
-      )}
+      {base64Image 
 
-      {/* <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-      <div className="image-container">
-      <img src='../temp.png' alt="Generated" />
-      </div>
       
-      <div className="button-container">
-      <Stack spacing={2} direction="row">
-      <UploadToIPFS base64Image={'base64Image'.split(",")[1]} onUploadSuccess={onUriSet} />
-      <UploadToIPFS base64Image={'base64Image'.split(",")[1]} onUploadSuccess={onUriSet} />
-      <UploadToIPFS base64Image={'base64Image'.split(",")[1]} onUploadSuccess={onUriSet} />
-      </Stack>
-    </div>
-    
-</Modal> */}
+      // && (
+      //   <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      //     <div>
+      //       <img src={base64Image} alt="Generated" className="image" />
+      //       <UploadToIPFS
+      //         base64Image={base64Image.split(",")[1]}
+      //         onUploadSuccess={onUriSet}
+      //       />
+      //     </div>
+      //   </Modal>
+      // )
+      }
     </div>
   );
 };
