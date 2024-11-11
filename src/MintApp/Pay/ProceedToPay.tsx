@@ -22,7 +22,7 @@ export const useProceedToPay = () => {
       // Simulate the contract call to check if it will succeed
       const { request } = await simulateContract(config, {
         abi,
-        address: "0x69c4893Fbb213e7082180E619D03ccAF7808e52C",
+        address: import.meta.env.VITE_PAY_CONTRACT_ADDREESS,
         functionName: "pay",
         args: [], // Add any necessary arguments for the 'pay' function here
         value: valueInWei,

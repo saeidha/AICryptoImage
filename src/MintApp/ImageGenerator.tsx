@@ -1,17 +1,15 @@
 // ImageGenerator.tsx
-import React, { useState, useEffect } from 'react';
- import UploadToIPFS from "./UploadToIPFS";
-import PromptForm from "./Promp"
+import React, { useState, useEffect } from "react";
+import UploadToIPFS from "./UploadToIPFS";
+import PromptForm from "./Promp";
 import { useProceedToPay } from "./Pay/ProceedToPay";
-import { Button } from '@mui/material';
-
-
 
 interface ImageGeneratorProps {
-  onUriSet: (uri: string) => void; // Prop to set the URI
+  onUriSet: (uri: string) => void;
+  onBase64ImageSet: (image: string) => void;
 }
 
-const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
+const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet, onBase64ImageSet }) => {
   const [prompt, setPrompt] = useState<string>("");
   const [base64Image, setBase64Image] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -22,13 +20,13 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
   useEffect(() => {
     const handlePaymentSuccess = async () => {
       if (isPay) {
-        console.log('Payment was successful!');
+        console.log("Payment was successful!");
         // Call the generateImage function if payment was successful
         try {
           await generateImage();
           setPrompt("");
         } catch (error) {
-          console.error('Error generating image:', error);
+          console.error("Error generating image:", error);
         }
       }
     };
@@ -37,12 +35,11 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
   }, [isPay]);
   useEffect(() => {
     if (error) {
-      console.error('There was an error with the payment:', error);
+      console.error("There was an error with the payment:", error);
       // Additional actions on error, e.g., display a notification
       setError(error);
     }
   }, [errorr]);
-  
 
   const generateImage = async () => {
     setLoading(true);
@@ -66,7 +63,9 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
         const blob = await response.blob();
         const reader = new FileReader();
         reader.onloadend = () => {
-          setBase64Image(reader.result as string);
+          const res = reader.result as string
+          setBase64Image(res);
+          onBase64ImageSet(res);
         };
         reader.readAsDataURL(blob);
       } else {
@@ -80,12 +79,13 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
     }
   };
 
+
   const handleSubmit = async () => {
     console.log("Start payment process");
     try {
       await proceedToPay();
     } catch (e) {
-      console.error('Error in payment process:', e);
+      console.error("Error in payment process:", e);
     }
   };
 
@@ -100,14 +100,12 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
       {loading ? "Generating..." : "Generate Image"}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {base64Image 
-      && (
+      {base64Image && (
         <UploadToIPFS
-              base64Image={base64Image.split(",")[1]}
-              onUploadSuccess={onUriSet}
-            />
-      )
-      }
+          base64Image={base64Image.split(",")[1]}
+          onUploadSuccess={onUriSet}
+        />
+      )}
     </div>
   );
 };

@@ -1,31 +1,22 @@
 // MintApp.tsx
-import React, { useState } from "react";
-import { useAccount, useConnect, useDisconnect, useWriteContract } from "wagmi";
-import { abi } from "../abi"; // Ensure that you import your contract ABI
+import { useState } from "react";
+import { useAccount } from "wagmi";
+import { simulateContract, writeContract } from "@wagmi/core";
+import { abi } from "../abi";
 import ImageGenerator from "./ImageGenerator";
 import TabBar from "../Tabbar/TabBar";
 import "./MintApp.css";
 import GeneratedModal from "../Modal/GeneratedModal/GeneratedModal";
-
-// import Box from '@mui/material/Box';
-// import Button from '@mui/material/Button';
-// import Checkbox from '@mui/material/Checkbox';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import Divider from '@mui/material/Divider';
-// import FormLabel from '@mui/material/FormLabel';
-// import FormControl from '@mui/material/FormControl';
-// import Link from '@mui/material/Link';
-// import TextField from '@mui/material/TextField';
-
 import CssBaseline from "@mui/material/CssBaseline";
-
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
+import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import AppTheme from "../theme/AppTheme";
-import DismissibleAlert from "../DismissibleAlert";
+// import DismissibleAlert from "../DismissibleAlert";
 import logo from "../images/logo-mini.svg";
+import { config } from "./wagmi";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -73,17 +64,16 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
   const account = useAccount();
   // const { connectors, connect, status, error } = useConnect();
   // const { disconnect } = useDisconnect();
-  const { writeContract } = useWriteContract();
-  const [alert, setAlert] = useState<{ type: 'success' | 'info' | 'warning' | 'error'; message: string } | null>(null);
+  // const { writeContract } = useWriteContract();
+  // const [alert, setAlert] = useState<{ type: 'success' | 'info' | 'warning' | 'error'; message: string } | null>(null);
 
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDREESS;
   const [uri, setUri] = useState<string | null>(null);
-  const name = "Your NFT Name";
-  const description = "Your NFT Description";
   const [quantity, setQuantity] = useState<number>(1);
-
-  async function submit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  const [base64Image, setBase64Image] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  async function submit() {
 
     if (!uri) {
       console.error("No URI set");
@@ -95,18 +85,59 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
       return;
     }
 
+    console.log("Sending")
+    console.log("contractAddress " + contractAddress)
+    console.log("quantity " + quantity)
+    console.log("account address " + account.address)
+    console.log("name " + name)
+    console.log("description " + description)
+    console.log("quantity " + quantity)
+    console.log("uri " + uri)
+    console.log("abi " + abi)
+
     try {
-      const tx = await writeContract({
+
+
+      const { request } = await simulateContract(config, {
+        abi,
         address: contractAddress,
-        abi: abi,
         functionName: "mintNFTs",
         args: [account.address, BigInt(quantity), uri, name, description],
       });
 
-      console.log("Transaction:", tx);
+      // Proceed to write the contract if simulation succeeded
+      console.log("Simulation succeeded, proceeding with transaction.");
+      const hash = await writeContract(config, request);
+
+      // Optionally, you can wait for the transaction receipt if needed
+      console.log("Transaction sent, hash:", hash);
     } catch (error) {
       console.error("Error writing contract:", error);
     }
+  }
+
+  const handleSetImage= (image: string) => {
+    setBase64Image(image)
+  }
+
+  const onSetQunatity= async (quantity: number, name: string, description: string) => {
+    console.log("on mint processwith qunatity");
+    setQuantity(quantity)
+    setName(name)
+    setDescription(description)
+    try {
+      await submit();
+    } catch (e) {
+      console.error("Error in payment process:", e);
+    }
+  }
+
+  const [openModal, setOpenModal] = useState(true); // Manage the open state in the parent
+
+  const setSampleBase64 = () => {
+    setBase64Image('jaksdaldajdkl')
+    setOpenModal(true)
+    setUri('bafkreigjwuujkanbznrd4q5ully3wu7ldozb3jjocdqjou4gvl7uf5hhdu')
   }
 
   return (
@@ -123,11 +154,19 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
           >
             AI NFT Generator
           </Typography>
+{/*Samplllllleeee*/}
+          <Button onClick={setSampleBase64}>Open modal</Button>
+{/*Samplllllleeee*/}
+          {base64Image !== '' && (
+          <GeneratedModal base64Image={base64Image}
+          onSetMint={onSetQunatity}
+          open={openModal} // Pass the open state
+          setOpen={setOpenModal} // Pass the setOpen function
+         />
+          )}
+          <ImageGenerator onUriSet={setUri} onBase64ImageSet={handleSetImage} />
 
-          <GeneratedModal onQuantitySet={setQuantity} />
-          <ImageGenerator onUriSet={setUri} />
 
-          
           {/* <div className="container">
             <form onSubmit={submit}>
               <label>
@@ -174,11 +213,11 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
             
           </div> */}
 
-          {alert && (
+          {/* {alert && (
             <Stack sx={{ width: "90%", alignItems: "center" }} spacing={2}>
               <DismissibleAlert type={alert.type} message={alert.message} />
             </Stack>
-          )}
+          )} */}
         </Card>
       </MintContainer>
     </AppTheme>

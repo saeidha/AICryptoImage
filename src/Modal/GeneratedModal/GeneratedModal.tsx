@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import Button from '@mui/material/Button';
 import Stack from "@mui/material/Stack";
 // import UploadToIPFS from "../../MintApp/UploadToIPFS";
 import Typography from "@mui/material/Typography";
@@ -23,14 +22,16 @@ const style = {
 };
 
 interface NestedModalProps {
-  onQuantitySet: (quantity: number) => void;
+  base64Image: string;
+  onSetMint: (quantity: number, name: string, description: string) => void;
+  open: boolean; // Accept open state as a prop
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>; // Accept setOpen as a prop
 }
 
-export default function NestedModal({ onQuantitySet }: NestedModalProps) {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
+export default function NestedModal({ base64Image, onSetMint, open, setOpen }: NestedModalProps) {
+
+  // const [open, setOpen] = React.useState(true);
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -39,21 +40,19 @@ export default function NestedModal({ onQuantitySet }: NestedModalProps) {
     setOpen(false);
   };
 
-  const onSetMintNumber = (number: number) => {
-    onQuantitySet(number);
+  const onSetMintParams = (number: number, name: string, description: string) => {
+    onSetMint(number, name, description);
     handleClose();
   };
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >
-        
         
         <Box sx={{ ...style, width: 500 }}>
           
@@ -67,12 +66,12 @@ export default function NestedModal({ onQuantitySet }: NestedModalProps) {
           </Typography>
 
           <div className="image-container">
-      <img src='../temp.png' alt="Generated" />
+      <img src={base64Image} alt="Generated" />
       </div>
       
       <div className="button-container">
       <Stack spacing={2} direction="row" useFlexGap sx={{justifyContent: "space-between" }}>
-        <MintModal onSetMintNumber={onSetMintNumber} />
+        <MintModal onSetedMint={onSetMintParams} />
         <SellModal done={handleSellDone} />
       </Stack>
     </div>
