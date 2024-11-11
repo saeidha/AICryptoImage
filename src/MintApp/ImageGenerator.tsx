@@ -1,8 +1,8 @@
 // ImageGenerator.tsx
 import React, { useState, useEffect } from 'react';
-// import UploadToIPFS from "./UploadToIPFS"; // Ensure this is the correct import path
+ import UploadToIPFS from "./UploadToIPFS";
 import PromptForm from "./Promp"
-import proceedToPay, { useProceedToPay } from "./Pay/ProceedToPay";
+import { useProceedToPay } from "./Pay/ProceedToPay";
 import { Button } from '@mui/material';
 
 
@@ -17,8 +17,8 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   /// Pay result
-  const { proceedToPay, isPay, error } = useProceedToPay();
-  const [errorr, setError] = useState<string | null>(null);
+  const { proceedToPay, isPay, errorr } = useProceedToPay();
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     const handlePaymentSuccess = async () => {
       if (isPay) {
@@ -39,8 +39,9 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
     if (error) {
       console.error('There was an error with the payment:', error);
       // Additional actions on error, e.g., display a notification
+      setError(error);
     }
-  }, [error]);
+  }, [errorr]);
   
 
   const generateImage = async () => {
@@ -80,18 +81,16 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
   };
 
   const handleSubmit = async () => {
-    console.log("start pay proccess")
+    console.log("Start payment process");
     try {
-      await useProceedToPay()
+      await proceedToPay();
     } catch (e) {
       console.error('Error in payment process:', e);
-      setError('Unexpected error occurred');
     }
   };
 
   return (
     <div className="centered-container">
-      <Button onClick={handleSubmit}>Pay </Button>
       <PromptForm
         sendPrompt={handleSubmit}
         prompt={prompt}
@@ -102,19 +101,12 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet }) => {
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {base64Image 
-
-      
-      // && (
-      //   <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-      //     <div>
-      //       <img src={base64Image} alt="Generated" className="image" />
-      //       <UploadToIPFS
-      //         base64Image={base64Image.split(",")[1]}
-      //         onUploadSuccess={onUriSet}
-      //       />
-      //     </div>
-      //   </Modal>
-      // )
+      && (
+        <UploadToIPFS
+              base64Image={base64Image.split(",")[1]}
+              onUploadSuccess={onUriSet}
+            />
+      )
       }
     </div>
   );

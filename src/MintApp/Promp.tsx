@@ -1,20 +1,21 @@
-import React from 'react';
-import Button from '@mui/material/Button';
-import './PromptForm.css'; // Import the CSS file
-import TextField from '@mui/material/TextField';
-
+import React from "react";
+import Button from "@mui/material/Button";
+import "./PromptForm.css"; // Import the CSS file
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
 interface PromptFormProps {
-  sendPrompt: (event: React.FormEvent<HTMLFormElement>) => void;
+  sendPrompt: () => void;
   prompt: string;
   setPrompt: (prompt: string) => void;
 }
 
-const PromptForm: React.FC<PromptFormProps> = ({ sendPrompt, prompt, setPrompt }) => {
+const PromptForm: React.FC<PromptFormProps> = ({
+  sendPrompt,
+  prompt,
+  setPrompt,
+}) => {
   return (
-    // <ThemeProvider theme={theme}>
-
-    
-    <form onSubmit={sendPrompt} className="prompt-form"> {/* Apply class name here */}
+    <Stack spacing={2} direction={"row"}>
       <TextField
         variant="outlined"
         value={prompt}
@@ -22,8 +23,8 @@ const PromptForm: React.FC<PromptFormProps> = ({ sendPrompt, prompt, setPrompt }
         placeholder="Enter your prompt"
         label="Prompt"
         fullWidth
-        slotProps={{
-          
+        slotProps={
+          {
             // input: {
             //     style: {
             //       color: 'white', // Change the text color
@@ -35,27 +36,29 @@ const PromptForm: React.FC<PromptFormProps> = ({ sendPrompt, prompt, setPrompt }
             //       color: 'white', // Change the label color
             //       padding: '10px',
             //     },
-            //   },    
-        }}
-        sx={{
+            //   },
+          }
+        }
+        sx={
+          {
             // '&:hover .MuiOutlinedInput-notchedOutline': {
             //   borderColor: 'gray', // Change border color on hover
             // },
             // '&.Mui-focused fieldset .MuiOutlinedInput-notchedOutline': {
             //   borderColor: 'red', // Change border color when focused
             // },
-          }}
+          }
+        }
       />
-      <Button className='prompt-button'
+      <Button
+        className="prompt-button"
         type="submit"
         variant="contained"
-        // color="violet">
-        >
+        onClick={sendPrompt}
+      >
         Generate Image
       </Button>
-    </form>
-
-    // </ThemeProvider>
+    </Stack>
   );
 };
 

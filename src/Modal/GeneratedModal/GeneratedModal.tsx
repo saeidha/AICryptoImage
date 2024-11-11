@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Stack from "@mui/material/Stack";
-import UploadToIPFS from "../../MintApp/UploadToIPFS";
+// import UploadToIPFS from "../../MintApp/UploadToIPFS";
 import Typography from "@mui/material/Typography";
 import './GeneratedModal.css'
 import MintModal from "../MintModal/MintModal";
@@ -23,10 +23,10 @@ const style = {
 };
 
 interface NestedModalProps {
-  onUriSet: (uri: string) => void;
+  onQuantitySet: (quantity: number) => void;
 }
 
-export default function NestedModal({ onUriSet }: NestedModalProps) {
+export default function NestedModal({ onQuantitySet }: NestedModalProps) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -40,7 +40,8 @@ export default function NestedModal({ onUriSet }: NestedModalProps) {
   };
 
   const onSetMintNumber = (number: number) => {
-    console.log(number)
+    onQuantitySet(number);
+    handleClose();
   };
 
   return (
@@ -73,7 +74,6 @@ export default function NestedModal({ onUriSet }: NestedModalProps) {
       <Stack spacing={2} direction="row" useFlexGap sx={{justifyContent: "space-between" }}>
         <MintModal onSetMintNumber={onSetMintNumber} />
         <SellModal done={handleSellDone} />
-      {/* <UploadToIPFS base64Image={'base64Image'.split(",")[1]} onUploadSuccess={onUriSet} /> */}
       </Stack>
     </div>
 

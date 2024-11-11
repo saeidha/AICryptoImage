@@ -7,7 +7,6 @@ import TabBar from "../Tabbar/TabBar";
 import "./MintApp.css";
 import GeneratedModal from "../Modal/GeneratedModal/GeneratedModal";
 
-
 // import Box from '@mui/material/Box';
 // import Button from '@mui/material/Button';
 // import Checkbox from '@mui/material/Checkbox';
@@ -25,7 +24,7 @@ import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import AppTheme from "../theme/AppTheme";
-
+import DismissibleAlert from "../DismissibleAlert";
 import logo from "../images/logo-mini.svg";
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -72,9 +71,10 @@ const MintContainer = styled(Stack)(({ theme }) => ({
 
 export default function MintApp(props: { disableCustomTheme?: boolean }) {
   const account = useAccount();
-  const { connectors, connect, status, error } = useConnect();
-  const { disconnect } = useDisconnect();
+  // const { connectors, connect, status, error } = useConnect();
+  // const { disconnect } = useDisconnect();
   const { writeContract } = useWriteContract();
+  const [alert, setAlert] = useState<{ type: 'success' | 'info' | 'warning' | 'error'; message: string } | null>(null);
 
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDREESS;
   const [uri, setUri] = useState<string | null>(null);
@@ -124,11 +124,11 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
             AI NFT Generator
           </Typography>
 
-          <GeneratedModal onUriSet={setUri}/>
+          <GeneratedModal onQuantitySet={setQuantity} />
+          <ImageGenerator onUriSet={setUri} />
 
-          <div className="container">
-            <ImageGenerator onUriSet={setUri} />
-
+          
+          {/* <div className="container">
             <form onSubmit={submit}>
               <label>
                 Number of NFTs to mint:
@@ -171,7 +171,14 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
               <div>{status}</div>
               <div>{error?.message}</div>
             </div>
-          </div>
+            
+          </div> */}
+
+          {alert && (
+            <Stack sx={{ width: "90%", alignItems: "center" }} spacing={2}>
+              <DismissibleAlert type={alert.type} message={alert.message} />
+            </Stack>
+          )}
         </Card>
       </MintContainer>
     </AppTheme>

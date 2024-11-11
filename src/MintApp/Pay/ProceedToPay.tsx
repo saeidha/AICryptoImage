@@ -7,11 +7,12 @@ import { useState } from 'react';
 export const useProceedToPay = () => {
   const { address } = useAccount();
   const [isPay, setIsPay] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [errorr, setError] = useState<string | null>(null);
 
   const proceedToPay = async () => {
     if (!address) {
       console.error("No account connected");
+      setError("No account connected");
       return;
     }
 
@@ -41,7 +42,7 @@ export const useProceedToPay = () => {
     }
   };
 
-  return { proceedToPay, isPay, error };
+  return { proceedToPay, isPay, errorr };
 };
 
-export default useProceedToPay
+export default useProceedToPay;
