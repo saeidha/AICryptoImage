@@ -39,6 +39,10 @@ export default function NestedModal({ onUriSet }: NestedModalProps) {
     setOpen(false);
   };
 
+  const onSetMintNumber = (number: number) => {
+    console.log(number)
+  };
+
   return (
     <div>
       <Button onClick={handleOpen}>Open modal</Button>
@@ -67,7 +71,7 @@ export default function NestedModal({ onUriSet }: NestedModalProps) {
       
       <div className="button-container">
       <Stack spacing={2} direction="row" useFlexGap sx={{justifyContent: "space-between" }}>
-        <MintModal onUriSet={onUriSet} />
+        <MintModal onSetMintNumber={onSetMintNumber} />
         <SellModal done={handleSellDone} />
       {/* <UploadToIPFS base64Image={'base64Image'.split(",")[1]} onUploadSuccess={onUriSet} /> */}
       </Stack>
