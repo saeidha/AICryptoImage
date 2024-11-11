@@ -3,9 +3,9 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Stack from "@mui/material/Stack";
-import UploadToIPFS from "../MintApp/UploadToIPFS";
+import UploadToIPFS from "../../MintApp/UploadToIPFS";
 import Typography from "@mui/material/Typography";
-import './Modal.css'
+import './MintModal.css'
 const style = {
   position: 'absolute',
   top: '50%',
@@ -20,11 +20,11 @@ const style = {
   pb: 3,
 };
 
-interface NestedModalProps {
+interface MintModalProps {
   onUriSet: (uri: string) => void;
 }
 
-export default function NestedModal({ onUriSet }: NestedModalProps) {
+export default function MintModal({ onUriSet }: MintModalProps) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -35,7 +35,7 @@ export default function NestedModal({ onUriSet }: NestedModalProps) {
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
+      <Button variant="contained" color="secondary" onClick={handleOpen} sx={{width: 205}}> Mint NFT</Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -52,7 +52,7 @@ export default function NestedModal({ onUriSet }: NestedModalProps) {
             variant="h4"
             sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)", textAlign: "center" }}
           >
-            Generated NFT
+            Mint NFT
           </Typography>
 
           <div className="image-container">
@@ -61,6 +61,7 @@ export default function NestedModal({ onUriSet }: NestedModalProps) {
       
       <div className="button-container">
       <Stack spacing={2} direction="row" sx={{height: "80px", width: "100%"}}>
+        
       <UploadToIPFS base64Image={'base64Image'.split(",")[1]} onUploadSuccess={onUriSet} />
       <UploadToIPFS base64Image={'base64Image'.split(",")[1]} onUploadSuccess={onUriSet} />
       <UploadToIPFS base64Image={'base64Image'.split(",")[1]} onUploadSuccess={onUriSet} />

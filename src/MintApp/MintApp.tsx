@@ -5,7 +5,7 @@ import { abi } from "../abi"; // Ensure that you import your contract ABI
 import ImageGenerator from "./ImageGenerator";
 import TabBar from "../Tabbar/TabBar";
 import "./MintApp.css";
-import NestedModal from "../Modal/Modal";
+import GeneratedModal from "../Modal/GeneratedModal/GeneratedModal";
 
 // import Box from '@mui/material/Box';
 // import Button from '@mui/material/Button';
@@ -123,7 +123,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
             AI NFT Generator
           </Typography>
 
-          <NestedModal onUriSet={setUri}/>
+          <GeneratedModal onUriSet={setUri}/>
 
           <div className="container">
             <ImageGenerator onUriSet={setUri} />
