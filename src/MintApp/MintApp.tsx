@@ -14,7 +14,7 @@ import MuiCard from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import AppTheme from "../theme/AppTheme";
-// import DismissibleAlert from "../DismissibleAlert";
+import DismissibleAlert from "../DismissibleAlert";
 import logo from "../images/logo-mini.svg";
 import { config } from "./wagmi";
 
@@ -65,7 +65,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
   // const { connectors, connect, status, error } = useConnect();
   // const { disconnect } = useDisconnect();
   // const { writeContract } = useWriteContract();
-  // const [alert, setAlert] = useState<{ type: 'success' | 'info' | 'warning' | 'error'; message: string } | null>(null);
+  const [alert, setAlert] = useState<{ type: 'success' | 'info' | 'warning' | 'error'; message: string } | null>(null);
 
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDREESS;
   const [uri, setUri] = useState<string | null>(null);
@@ -91,7 +91,6 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
     console.log("account address " + account.address)
     console.log("name " + name)
     console.log("description " + description)
-    console.log("quantity " + quantity)
     console.log("uri " + uri)
     console.log("abi " + abi)
 
@@ -111,9 +110,16 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
 
       // Optionally, you can wait for the transaction receipt if needed
       console.log("Transaction sent, hash:", hash);
+      setUri(null);
+      setQuantity(1);
+      setBase64Image("");
+      setName("");
+      setDescription("");
+      setAlert({type: "success", message: "Minted Successfully"})
     } catch (error) {
       console.error("Error writing contract:", error);
     }
+    
   }
 
   const handleSetImage= (image: string) => {
@@ -125,6 +131,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
     setQuantity(quantity)
     setName(name)
     setDescription(description)
+    setAlert({type: "success", message: "Minted Successfully"})
     try {
       await submit();
     } catch (e) {
@@ -135,9 +142,10 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
   const [openModal, setOpenModal] = useState(true); // Manage the open state in the parent
 
   const setSampleBase64 = () => {
-    setBase64Image('jaksdaldajdkl')
-    setOpenModal(true)
-    setUri('bafkreigjwuujkanbznrd4q5ully3wu7ldozb3jjocdqjou4gvl7uf5hhdu')
+    setAlert({type: "success", message: "Minted Successfully"})
+    // setBase64Image('jaksdaldajdkl')
+    // setOpenModal(true)
+    // setUri('bafkreigjwuujkanbznrd4q5ully3wu7ldozb3jjocdqjou4gvl7uf5hhdu')
   }
 
   return (
@@ -213,12 +221,14 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
             
           </div> */}
 
-          {/* {alert && (
-            <Stack sx={{ width: "90%", alignItems: "center" }} spacing={2}>
+          
+        </Card>
+
+        {alert && (
+            <Stack sx={{ width: "90%", alignItems: "center", bottom:"20" }} spacing={2}>
               <DismissibleAlert type={alert.type} message={alert.message} />
             </Stack>
-          )} */}
-        </Card>
+          )}
       </MintContainer>
     </AppTheme>
   );

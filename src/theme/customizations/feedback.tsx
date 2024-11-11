@@ -1,5 +1,5 @@
 import { Theme, alpha, Components } from '@mui/material/styles';
-import { gray, orange } from '../themePrimitives';
+import { gray, green } from '../themePrimitives';
 
 /* eslint-disable import/prefer-default-export */
 export const feedbackCustomizations: Components<Theme> = {
@@ -7,15 +7,15 @@ export const feedbackCustomizations: Components<Theme> = {
     styleOverrides: {
       root: ({ theme }) => ({
         borderRadius: 10,
-        backgroundColor: orange[100],
+        backgroundColor: green[100],
         color: theme.palette.text.primary,
-        border: `1px solid ${alpha(orange[300], 0.5)}`,
+        border: `1px solid ${alpha(green[300], 0.5)}`,
         '& .MuiAlert-icon': {
-          color: orange[500],
+          color: green[500],
         },
         ...theme.applyStyles('dark', {
-          backgroundColor: `${alpha(orange[900], 0.5)}`,
-          border: `1px solid ${alpha(orange[800], 0.5)}`,
+          backgroundColor: `${alpha(green[900], 0.5)}`,
+          border: `1px solid ${alpha(green[800], 0.5)}`,
         }),
       }),
     },
