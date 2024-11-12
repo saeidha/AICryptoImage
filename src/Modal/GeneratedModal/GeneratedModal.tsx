@@ -14,7 +14,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  // border: '2px solid #000',
   boxShadow: 24,
   pt: 2,
   px: 4,
@@ -24,11 +24,12 @@ const style = {
 interface NestedModalProps {
   base64Image: string;
   onSetMint: (quantity: number, name: string, description: string) => void;
+  onSetSell: (price: number, name: string, description: string) => void;
   open: boolean; // Accept open state as a prop
   setOpen: React.Dispatch<React.SetStateAction<boolean>>; // Accept setOpen as a prop
 }
 
-export default function NestedModal({ base64Image, onSetMint, open, setOpen }: NestedModalProps) {
+export default function NestedModal({ base64Image, onSetMint, onSetSell, open, setOpen }: NestedModalProps) {
 
   // const [open, setOpen] = React.useState(true);
 
@@ -36,12 +37,13 @@ export default function NestedModal({ base64Image, onSetMint, open, setOpen }: N
     setOpen(false);
   };
 
-  const handleSellDone = () => {
-    setOpen(false);
-  };
-
   const onSetMintParams = (number: number, name: string, description: string) => {
     onSetMint(number, name, description);
+    handleClose();
+  };
+
+  const onSetSellParams = (price: number, name: string, description: string) => {
+    onSetSell(price, name, description);
     handleClose();
   };
 
@@ -72,7 +74,7 @@ export default function NestedModal({ base64Image, onSetMint, open, setOpen }: N
       <div className="button-container">
       <Stack spacing={2} direction="row" useFlexGap sx={{justifyContent: "space-between" }}>
         <MintModal onSetedMint={onSetMintParams} />
-        <SellModal done={handleSellDone} />
+        <SellModal base64Image={base64Image} onSetedSell={onSetSellParams} />
       </Stack>
     </div>
 

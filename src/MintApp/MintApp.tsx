@@ -147,15 +147,32 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
     }
   }
 
+// fix it
+  const onSetSellNFT = async (price: number, name: string, description: string) => {
+    console.log("on sell with " + " price: " + price + " name: " + name + " description: " + description);
+    // setQuantity(quantity)
+    // setName(name)
+    // setDescription(description)
+    // setAlert({ type: "success", message: "Minted Successfully" })
+    // try {
+    //   await submit();
+    // } catch (e) {
+    //   console.error("Error in payment process:", e);
+    // }
+  }
+
+
+
+
   const [openModal, setOpenModal] = useState(true); // Manage the open state in the parent
-  const isShowSample = false;
+  const isShowSample = true;
   const setSampleBase64 = () => {
 
     // setOpenSucccessModal(true)
     // setOnLoading('Generating...')
-    // setBase64Image('jaksdaldajdkl')
-    // setOpenModal(true)
-    // setUri('bafkreigjwuujkanbznrd4q5ully3wu7ldozb3jjocdqjou4gvl7uf5hhdu')
+    setBase64Image('jaksdaldajdkl')
+    setOpenModal(true)
+    setUri('bafkreigjwuujkanbznrd4q5ully3wu7ldozb3jjocdqjou4gvl7uf5hhdu')
   }
 
   return (
@@ -177,6 +194,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
           {base64Image !== '' && (
             <GeneratedModal base64Image={base64Image}
               onSetMint={onSetQunatity}
+              onSetSell={onSetSellNFT}
               open={openModal} // Pass the open state
               setOpen={setOpenModal} // Pass the setOpen function
             />
