@@ -165,7 +165,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
 
 
   const [openModal, setOpenModal] = useState(true); // Manage the open state in the parent
-  const isShowSample = true;
+  const isShowSample = false;
   const setSampleBase64 = () => {
 
     // setOpenSucccessModal(true)
