@@ -17,6 +17,7 @@ import AppTheme from "../theme/AppTheme";
 import DismissibleAlert from "../DismissibleAlert";
 import logo from "../images/logo-mini.svg";
 import { config } from "./wagmi";
+import MintResult from "../Modal/MintResult/MintResult";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -73,6 +74,9 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
   const [base64Image, setBase64Image] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
+
+  const [openSucccessModal, setOpenSucccessModal] = useState(false); // Manage the open state in the parent
+
   async function submit() {
 
     if (!uri) {
@@ -142,7 +146,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
   const [openModal, setOpenModal] = useState(true); // Manage the open state in the parent
 
   const setSampleBase64 = () => {
-    setAlert({type: "success", message: "Minted Successfully"})
+    setOpenSucccessModal(true)
     // setBase64Image('jaksdaldajdkl')
     // setOpenModal(true)
     // setUri('bafkreigjwuujkanbznrd4q5ully3wu7ldozb3jjocdqjou4gvl7uf5hhdu')
@@ -164,7 +168,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
           </Typography>
 {/*Samplllllleeee*/}
           <Button onClick={setSampleBase64}>Open modal</Button>
-{/*Samplllllleeee*/}
+
           {base64Image !== '' && (
           <GeneratedModal base64Image={base64Image}
           onSetMint={onSetQunatity}
@@ -172,6 +176,14 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
           setOpen={setOpenModal} // Pass the setOpen function
          />
           )}
+
+            <MintResult
+              name={name}
+              number={quantity}
+              open={openSucccessModal}
+              setOpen={setOpenSucccessModal}
+            />
+
           <ImageGenerator onUriSet={setUri} onBase64ImageSet={handleSetImage} />
 
 
