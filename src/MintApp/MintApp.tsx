@@ -108,8 +108,8 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
       const { request } = await simulateContract(config, {
         abi,
         address: contractAddress,
-        functionName: "mintNFTs",
-        args: [account.address, BigInt(quantity), uri, name, description],
+        functionName: "createNFTContract",
+        args: [name, "symbol", BigInt(quantity), uri, description],
       });
 
       // Proceed to write the contract if simulation succeeded
@@ -118,12 +118,12 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
 
       // Optionally, you can wait for the transaction receipt if needed
       console.log("Transaction sent, hash:", hash);
+      setOpenSucccessModal(true)
       setUri(null);
       setQuantity(1);
       setBase64Image("");
       setName("");
       setDescription("");
-      setOpenSucccessModal(true)
     } catch (error) {
       console.error("Error writing contract:", error);
     }
@@ -134,14 +134,14 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
     setBase64Image(image)
   }
 
-  const onSetQunatity = async (quantity: number, name: string, description: string) => {
-    console.log("on mint processwith qunatity");
-    setQuantity(quantity)
+  const onSetQunatity = async (quantityy: number, name: string, description: string) => {
+    console.log("on mint processwith qunatity: "+ quantityy);
+    setQuantity(quantityy)
     setName(name)
     setDescription(description)
     setAlert({ type: "success", message: "Minted Successfully" })
     try {
-      await submit();
+       await submit();
     } catch (e) {
       console.error("Error in payment process:", e);
     }

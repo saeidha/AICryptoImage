@@ -38,6 +38,7 @@ export default function NestedModal({ base64Image, onSetMint, onSetSell, open, s
   };
 
   const onSetMintParams = (number: number, name: string, description: string) => {
+    console.log("------on mint processwith qunatity: "+ number);
     onSetMint(number, name, description);
     handleClose();
   };
