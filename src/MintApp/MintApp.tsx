@@ -18,6 +18,7 @@ import DismissibleAlert from "../DismissibleAlert";
 import logo from "../images/logo-mini.svg";
 import { config } from "./wagmi";
 import MintResult from "../Modal/MintResult/MintResult";
+import LoadingModal from "../Modal/LoadingModal/LoadingModal"
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -77,6 +78,9 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
 
   const [openSucccessModal, setOpenSucccessModal] = useState(false); // Manage the open state in the parent
 
+  const [loading, setOnLoading] = useState(''); // Manage the open state in the parent
+
+
   async function submit() {
 
     if (!uri) {
@@ -119,23 +123,23 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
       setBase64Image("");
       setName("");
       setDescription("");
-      setAlert({type: "success", message: "Minted Successfully"})
+      setOpenSucccessModal(true)
     } catch (error) {
       console.error("Error writing contract:", error);
     }
-    
+
   }
 
-  const handleSetImage= (image: string) => {
+  const handleSetImage = (image: string) => {
     setBase64Image(image)
   }
 
-  const onSetQunatity= async (quantity: number, name: string, description: string) => {
+  const onSetQunatity = async (quantity: number, name: string, description: string) => {
     console.log("on mint processwith qunatity");
     setQuantity(quantity)
     setName(name)
     setDescription(description)
-    setAlert({type: "success", message: "Minted Successfully"})
+    setAlert({ type: "success", message: "Minted Successfully" })
     try {
       await submit();
     } catch (e) {
@@ -144,9 +148,11 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
   }
 
   const [openModal, setOpenModal] = useState(true); // Manage the open state in the parent
-
+  const isShowSample = false;
   const setSampleBase64 = () => {
-    setOpenSucccessModal(true)
+
+    // setOpenSucccessModal(true)
+    // setOnLoading('Generating...')
     // setBase64Image('jaksdaldajdkl')
     // setOpenModal(true)
     // setUri('bafkreigjwuujkanbznrd4q5ully3wu7ldozb3jjocdqjou4gvl7uf5hhdu')
@@ -158,6 +164,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
       <CssBaseline enableColorScheme />
       <MintContainer direction="column" justifyContent="space-between">
         <Card variant="outlined" sx={{ minWidth: 1000, maxWidth: 1000 }}>
+
           <img src={logo} width={"50px"} height={"50px"} />
           <Typography
             component="h1"
@@ -166,25 +173,23 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
           >
             AI NFT Generator
           </Typography>
-{/*Samplllllleeee*/}
-          <Button onClick={setSampleBase64}>Open modal</Button>
 
           {base64Image !== '' && (
-          <GeneratedModal base64Image={base64Image}
-          onSetMint={onSetQunatity}
-          open={openModal} // Pass the open state
-          setOpen={setOpenModal} // Pass the setOpen function
-         />
+            <GeneratedModal base64Image={base64Image}
+              onSetMint={onSetQunatity}
+              open={openModal} // Pass the open state
+              setOpen={setOpenModal} // Pass the setOpen function
+            />
           )}
 
-            <MintResult
-              name={name}
-              number={quantity}
-              open={openSucccessModal}
-              setOpen={setOpenSucccessModal}
-            />
-
-          <ImageGenerator onUriSet={setUri} onBase64ImageSet={handleSetImage} />
+          <LoadingModal text={loading} open={loading !== ''} />
+          <ImageGenerator onUriSet={setUri} onBase64ImageSet={handleSetImage} setLoading={setOnLoading} />
+          <MintResult
+            name={name}
+            number={quantity}
+            open={openSucccessModal}
+            setOpen={setOpenSucccessModal}
+          />
 
 
           {/* <div className="container">
@@ -233,14 +238,19 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
             
           </div> */}
 
-          
+          {/*Samplllllleeee*/}
+          {isShowSample && (
+          <Button onClick={setSampleBase64}>Open modal</Button>
+          )}
+          {/*Samplllllleeee*/}
+
         </Card>
 
         {alert && (
-            <Stack sx={{ width: "90%", alignItems: "center", bottom:"20" }} spacing={2}>
-              <DismissibleAlert type={alert.type} message={alert.message} />
-            </Stack>
-          )}
+          <Stack sx={{ width: "90%", alignItems: "center", bottom: "20" }} spacing={2}>
+            <DismissibleAlert type={alert.type} message={alert.message} />
+          </Stack>
+        )}
       </MintContainer>
     </AppTheme>
   );

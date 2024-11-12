@@ -7,12 +7,12 @@ import { useProceedToPay } from "./Pay/ProceedToPay";
 interface ImageGeneratorProps {
   onUriSet: (uri: string) => void;
   onBase64ImageSet: (image: string) => void;
+  setLoading: (loading: string) => void;
 }
 
-const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet, onBase64ImageSet }) => {
+const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet, onBase64ImageSet, setLoading }) => {
   const [prompt, setPrompt] = useState<string>("");
   const [base64Image, setBase64Image] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
 
   /// Pay result
   const { proceedToPay, isPay, errorr } = useProceedToPay();
@@ -42,7 +42,7 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet, onBase64Image
   }, [errorr]);
 
   const generateImage = async () => {
-    setLoading(true);
+    setLoading('Generating...');
     setError(null);
     setBase64Image(null);
 
@@ -75,7 +75,7 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet, onBase64Image
       console.error(error);
       setError("Error generating image");
     } finally {
-      setLoading(false);
+      setLoading('');
     }
   };
 
@@ -89,6 +89,11 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet, onBase64Image
     }
   };
 
+  const onUriSetDone = (uri: string) => {
+    onUriSet(uri)
+    setLoading('')
+  };
+
   return (
     <div className="centered-container">
       <PromptForm
@@ -96,14 +101,12 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet, onBase64Image
         prompt={prompt}
         setPrompt={setPrompt}
       />
-
-      {loading ? "Generating..." : "Generate Image"}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {base64Image && (
         <UploadToIPFS
           base64Image={base64Image.split(",")[1]}
-          onUploadSuccess={onUriSet}
+          onUploadSuccess={onUriSetDone}
         />
       )}
     </div>
