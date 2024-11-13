@@ -1,14 +1,17 @@
 .nav {
-    height: 100px;
-    display: flex; /* Use flexbox to layout the child elements */
-    align-items: center; /* Center child elements vertically */
-    justify-content: space-between; /* Space out the child elements */
-    padding: 0px 30px; /* Add padding to the left and right */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: "Open Sans", serif;
-    background-color: #000000;
+  height: 100px; /* Height of the navbar */
+  display: flex; /* Use flexbox to layout the child elements */
+  align-items: center; /* Center child elements vertically */
+  justify-content: space-between; /* Space out the child elements */
+  padding: 0 30px; /* Remove padding to allow full width */
+  margin: 0; /* Ensure no margin */
+  font-family: "Open Sans", serif;
+  background-color: #000000; /* Background color */
+  position: fixed; /* Fixed position */
+  top: 0; /* Align to the top */
+  left: 0; /* Align to the left */
+  right: 0; /* Align to the right */
+  z-index: 1000; /* Ensure it appears above other content */
   }
   
   .brand {
