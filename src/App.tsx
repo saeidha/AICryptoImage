@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ParallaxComponent from './Parallax/ParallaxParallaxComponent';
 import MintApp from './MintApp/MintApp'; // Import the LaunchApp component
 import { StyledEngineProvider } from '@mui/material/styles';
+import MarketPlace from './MarketPlace/MarketPlace';
 
 
 const App: React.FC = () => {
@@ -14,6 +15,7 @@ const App: React.FC = () => {
                 <Routes>
                     <Route path="/" element={<ParallaxComponent />} />
                     <Route path="/mint" element={<MintApp />} />
+                    <Route path="/marketPlace" element={<MarketPlace />} />
                 </Routes>
                 </StyledEngineProvider>
             </div>
