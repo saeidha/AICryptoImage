@@ -150,7 +150,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
 
 
   const submitSell = async (price: number, quantity: number, uri: string
-    , name: string, description: string, symbol: string, tokenId: string) => {
+    , name: string, description: string, symbol: string) => {
     if (!uri) {
       console.error("No URI set");
       return;
@@ -168,7 +168,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
         abi,
         address: contractAddress,
         functionName: "sellNFT",
-        args: [name, symbol, BigInt(tokenId), description, uri, BigInt(quantity), valueInWei],
+        args: [name, symbol, description, uri, BigInt(quantity), valueInWei],
       });
 
       // Proceed to write the contract if simulation succeeded
@@ -199,7 +199,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
     }
 
     try {
-      await submitSell(price, 1, uri, name, description, "SSSB", "1");
+      await submitSell(price, 1, uri, name, description, "SSSB");
     } catch (e) {
       console.error("Error in payment process:", e);
     }

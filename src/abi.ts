@@ -50,11 +50,11 @@ export const abi = [
               "name": "symbol",
               "type": "string"
           },
-          {
-              "internalType": "uint256",
-              "name": "tokenId",
-              "type": "uint256"
-          },
+          // {
+          //     "internalType": "uint256",
+          //     "name": "tokenId",
+          //     "type": "uint256"
+          // },
           {
               "internalType": "string",
               "name": "description",
