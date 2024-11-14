@@ -1,5 +1,5 @@
 // MarketPlace.tsx
-import { useState } from "react";
+import React, { useEffect, useState } from 'react';
 import { useAccount } from "wagmi";
 import { simulateContract, writeContract } from "@wagmi/core";
 import { abi } from "../abi";
@@ -19,6 +19,20 @@ import LoadingModal from "../Modal/LoadingModal/LoadingModal";
 import "./MarketPlace.css";
 import { config } from "../MintApp/wagmi";
 import Collection from "./Collection/Collection";
+
+
+
+import { useReadContract } from 'wagmi'
+
+type SellOfferType = {
+  count: number;
+  description: string;
+  name: string;
+  nftContract: string;
+  price: number;
+  seller: string;
+  uri: string;
+};
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -64,142 +78,64 @@ const MintContainer = styled(Stack)(({ theme }) => ({
 
 export default function MarketPlace(props: { disableCustomTheme?: boolean }) {
   const account = useAccount();
-  // const { connectors, connect, status, error } = useConnect();
-  // const { disconnect } = useDisconnect();
-  // const { writeContract } = useWriteContract();
-  const [alert, setAlert] = useState<{
-    type: "success" | "info" | "warning" | "error";
-    message: string;
-  } | null>(null);
-
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDREESS;
-  const [uri, setUri] = useState<string | null>(null);
+  
   const [quantity, setQuantity] = useState<number>(1);
-  const [base64Image, setBase64Image] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
 
   const [openSucccessModal, setOpenSucccessModal] = useState(false); // Manage the open state in the parent
 
   const [loading, setOnLoading] = useState(""); // Manage the open state in the parent
 
-  const items = [
-    { title: "Card 1", description: "Description for Card 1" },
-    { title: "Card 2", description: "Description for Card 2" },
-    { title: "Card 3", description: "Description for Card 3" },
-    { title: "Card 1", description: "Description for Card 1" },
-    { title: "Card 2", description: "Description for Card 2" },
-    { title: "Card 3", description: "Description for Card 3" },
-    { title: "Card 1", description: "Description for Card 1" },
-    { title: "Card 2", description: "Description for Card 2" },
-    { title: "Card 3", description: "Description for Card 3" },
-    { title: "Card 1", description: "Description for Card 1" },
-    { title: "Card 2", description: "Description for Card 2" },
-    { title: "Card 3", description: "Description for Card 3" },
-    // Add more items as needed
-  ];
 
-  async function submit() {
-    if (!uri) {
-      console.error("No URI set");
-      return;
-    }
-
-    if (!account.address) {
-      console.error("No account connected");
-      return;
-    }
-
-    console.log("Sending");
-    console.log("contractAddress " + contractAddress);
-    console.log("quantity " + quantity);
-    console.log("account address " + account.address);
-    console.log("name " + name);
-    console.log("description " + description);
-    console.log("uri " + uri);
-    console.log("abi " + abi);
-
+  const fetchMarketPlaceData = async (): Promise<SellOfferType[]> => {
     try {
-      const { request } = await simulateContract(config, {
-        abi,
+      const result = await useReadContract({
         address: contractAddress,
-        functionName: "createNFTContract",
-        args: [name, "symbol", BigInt(quantity), uri, description],
+        abi: abi,
+        functionName: 'getSellOffers',
+        args: []
       });
-
-      // Proceed to write the contract if simulation succeeded
-      console.log("Simulation succeeded, proceeding with transaction.");
-      const hash = await writeContract(config, request);
-
-      // Optionally, you can wait for the transaction receipt if needed
-      console.log("Transaction sent, hash:", hash);
-      setOpenSucccessModal(true);
-      setUri(null);
-      setQuantity(1);
-      setBase64Image("");
-      setName("");
-      setDescription("");
+  
+      const offers = result.data ?? [];
+  
+      return offers.map(offer => ({
+        count: Number(offer.count),
+        description: offer.description,
+        name: offer.name,
+        nftContract: offer.nftContract,
+        price: Number(offer.price),
+        seller: offer.seller,
+        uri: offer.uri,
+      }));
     } catch (error) {
-      console.error("Error writing contract:", error);
-    }
-  }
-
-  const handleSetImage = (image: string) => {
-    setBase64Image(image);
-  };
-
-  const onSetQunatity = async (
-    quantityy: number,
-    name: string,
-    description: string
-  ) => {
-    console.log("on mint processwith qunatity: " + quantityy);
-    setQuantity(quantityy);
-    setName(name);
-    setDescription(description);
-    setAlert({ type: "success", message: "Minted Successfully" });
-    try {
-      await submit();
-    } catch (e) {
-      console.error("Error in payment process:", e);
+      console.error("Error reading contract:", error);
+      return [];
     }
   };
 
-  // fix it
-  const onSetSellNFT = async (
-    price: number,
-    name: string,
-    description: string
-  ) => {
-    console.log(
-      "on sell with " +
-        " price: " +
-        price +
-        " name: " +
-        name +
-        " description: " +
-        description
-    );
-    // setQuantity(quantity)
-    // setName(name)
-    // setDescription(description)
-    // setAlert({ type: "success", message: "Minted Successfully" })
-    // try {
-    //   await submit();
-    // } catch (e) {
-    //   console.error("Error in payment process:", e);
-    // }
-  };
+
+  const [offers, setOffers] = useState<SellOfferType[]>([]);
+
+  // fetchMarketPlaceData().then(offers => {
+  //   setOffers(offers);
+  // });
+
+
 
   const [openModal, setOpenModal] = useState(true); // Manage the open state in the parent
-  const isShowSample = false;
-  const setSampleBase64 = () => {
-    // setOpenSucccessModal(true)
-    // setOnLoading('Generating...')
-    setBase64Image("jaksdaldajdkl");
-    setOpenModal(true);
-    setUri("bafkreigjwuujkanbznrd4q5ully3wu7ldozb3jjocdqjou4gvl7uf5hhdu");
-  };
+  const isShowSample = true;
+  var isLoadFirst = false; 
+const fetch = () => {
+  if (isLoadFirst == false) {
+    fetchMarketPlaceData().then(offers => {
+      setOffers(offers);
+    });
+    isLoadFirst = true
+  }
+  
+}
+
+fetch()
 
   return (
     <AppTheme {...props}>
@@ -209,14 +145,14 @@ export default function MarketPlace(props: { disableCustomTheme?: boolean }) {
       <MintContainer direction="column" justifyContent="space-between">
         <Stack
           sx={{
-            paddingTop: "150px",
+            paddingTop: "100px",
             paddingBottom: "50px",
             alignItems: "center",
           }}
         >
           <p className="typed-text">NFT Market Place</p>
 
-          {base64Image !== "" && (
+          {/* {base64Image !== "" && (
             <GeneratedModal
               base64Image={base64Image}
               onSetMint={onSetQunatity}
@@ -224,28 +160,29 @@ export default function MarketPlace(props: { disableCustomTheme?: boolean }) {
               open={openModal} // Pass the open state
               setOpen={setOpenModal} // Pass the setOpen function
             />
-          )}
+          )} */}
 
           <LoadingModal text={loading} open={loading !== ""} />
 
-          <MintResult
+          {/* <MintResult
             name={name}
             number={quantity}
             open={openSucccessModal}
+            isListed={false}
             setOpen={setOpenSucccessModal}
-          />
+          /> */}
 
           {/*Samplllllleeee*/}
-          {isShowSample && (
-            <Button onClick={setSampleBase64}>Open modal</Button>
-          )}
-          {/*Samplllllleeee*/}
+          {/* {isShowSample && (
+            <Button onClick={fetchMarketPlaceData}>Open modal</Button>
+          )} */}
+          {/*Sampllllleeee*/}
         </Stack>
         <Card
           variant="outlined"
           sx={{ minWidth: 1400, maxWidth: 1400, minHeight: 0 }}
         >
-          <Collection items={items} />
+          <Collection items={offers} address={account.address} />
         </Card>
       </MintContainer>
     </AppTheme>

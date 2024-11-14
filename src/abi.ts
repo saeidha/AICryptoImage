@@ -105,65 +105,54 @@ export const abi = [
       "type": "function"
   },
   {
-      "inputs": [
+    "inputs": [],
+    "name": "getSellOffers",
+    "outputs": [
+      {
+        "components": [
           {
-              "internalType": "address",
-              "name": "nftAddress",
-              "type": "address"
-          }
-      ],
-      "name": "getBuyableNFTs",
-      "outputs": [
+            "internalType": "address",
+            "name": "nftContract",
+            "type": "address"
+          },
           {
-              "components": [
-                  {
-                      "internalType": "address",
-                      "name": "nftAddress",
-                      "type": "address"
-                  },
-                  {
-                      "internalType": "uint256",
-                      "name": "tokenId",
-                      "type": "uint256"
-                  },
-                  {
-                      "internalType": "string",
-                      "name": "name",
-                      "type": "string"
-                  },
-                  {
-                      "internalType": "string",
-                      "name": "description",
-                      "type": "string"
-                  },
-                  {
-                      "internalType": "string",
-                      "name": "uri",
-                      "type": "string"
-                  },
-                  {
-                      "internalType": "uint256",
-                      "name": "count",
-                      "type": "uint256"
-                  },
-                  {
-                      "internalType": "uint256",
-                      "name": "price",
-                      "type": "uint256"
-                  },
-                  {
-                      "internalType": "address",
-                      "name": "seller",
-                      "type": "address"
-                  }
-              ],
-              "internalType": "struct NFTFactory.NFTSale[]",
-              "name": "",
-              "type": "tuple[]"
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "uri",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "count",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "seller",
+            "type": "address"
           }
-      ],
-      "stateMutability": "view",
-      "type": "function"
+        ],
+        "internalType": "struct NFTFactory.SellOffer[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
       "inputs": [],
