@@ -35,7 +35,7 @@ export default function SellModal({ base64Image, onSetedSell }: SellModalProps) 
   const [description, setDescription] = React.useState<string>("");
   const [quantity, setQuantity] = React.useState<number>(1);
   const defVlaue = Number(0.00001);
-  const defQuantity = Number(1);
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -56,7 +56,7 @@ export default function SellModal({ base64Image, onSetedSell }: SellModalProps) 
 
   const setInternalQuantity = (value: number) => {
     setQuantity(value)
-    setErrorQuantity(value < defQuantity)
+    setErrorQuantity(value < 1 || value > 100)
   }
 
   return (
@@ -96,6 +96,8 @@ export default function SellModal({ base64Image, onSetedSell }: SellModalProps) 
               />
             </Stack>
 
+            <Stack spacing={2} >
+
             <TextField
                   error={errorQuantity}
                   required
@@ -105,6 +107,10 @@ export default function SellModal({ base64Image, onSetedSell }: SellModalProps) 
                   defaultValue="1"
                   onChange={(e) => setInternalQuantity(Number(e.target.value))}
                   />
+{errorQuantity && (<p className='error'>Quantity can not be less than 1 and more than 100</p>)}
+</Stack>
+
+            
 
             <div className='price'>
 
