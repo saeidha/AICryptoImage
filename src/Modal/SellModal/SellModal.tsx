@@ -23,16 +23,19 @@ const style = {
 
 interface SellModalProps {
   base64Image: string;
-  onSetedSell: (price: number, name: string, description: string) => void;
+  onSetedSell: (price: number, name: string, description: string, quantity: number) => void;
 }
 
 export default function SellModal({ base64Image, onSetedSell }: SellModalProps) {
   const [open, setOpen] = React.useState(false);
   const [error, setError] = React.useState(false);
+  const [errorQuantity, setErrorQuantity] = React.useState(false);
   const [price, setPrice] = React.useState(0.00001);
   const [name, setName] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
+  const [quantity, setQuantity] = React.useState<number>(1);
   const defVlaue = Number(0.00001);
+  const defQuantity = Number(1);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -41,14 +44,19 @@ export default function SellModal({ base64Image, onSetedSell }: SellModalProps) 
   };
 
   const submit = () => {
-    console.log(price + " " + name + " " + description )
-    onSetedSell(price, name, description);
+    console.log("Sell NFT with price: " + price + " " + name + " " + description + " " + quantity)
+    onSetedSell(price, name, description, quantity);
     handleClose();
   };
 
   const setInternalPrice = (value: number) => {
     setPrice(value)
     setError(value < defVlaue)
+  }
+
+  const setInternalQuantity = (value: number) => {
+    setQuantity(value)
+    setErrorQuantity(value < defQuantity)
   }
 
   return (
@@ -87,6 +95,16 @@ export default function SellModal({ base64Image, onSetedSell }: SellModalProps) 
                 onChange={(e) => setDescription(e.target.value)}
               />
             </Stack>
+
+            <TextField
+                  error={errorQuantity}
+                  required
+                  label="NFT quantity"
+                  type="number"
+                  variant="outlined"
+                  defaultValue="1"
+                  onChange={(e) => setInternalQuantity(Number(e.target.value))}
+                  />
 
             <div className='price'>
 

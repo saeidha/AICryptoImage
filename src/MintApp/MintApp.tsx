@@ -148,8 +148,8 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
   }
 
 // fix it
-  const onSetSellNFT = async (price: number, name: string, description: string) => {
-    console.log("on sell with " + " price: " + price + " name: " + name + " description: " + description);
+  const onSetSellNFT = async (price: number, name: string, description: string, quantity: number) => {
+    console.log("on sell with " + " price: " + price + " name: " + name + " description: " + description + " quantity: " + quantity);
     // setQuantity(quantity)
     // setName(name)
     // setDescription(description)
