@@ -77,6 +77,10 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
   const [description, setDescription] = useState<string>('');
 
   const [openSucccessModal, setOpenSucccessModal] = useState(false); // Manage the open state in the parent
+  const [mintResultName, setMintResultName] = useState('');
+  const [mintResultQuantity, setMintResultQuantite] = useState(1);
+  const [mintResultIsListed, setMintResultIsListed] = useState<boolean | null>(null);
+
 
   const [loading, setOnLoading] = useState(''); // Manage the open state in the parent
 
@@ -93,14 +97,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
       return;
     }
 
-    console.log("Sending")
-    console.log("contractAddress " + contractAddress)
-    console.log("quantity " + quantity)
-    console.log("account address " + account.address)
-    console.log("name " + name)
-    console.log("description " + description)
-    console.log("uri " + uri)
-    console.log("abi " + abi)
+    console.log("Minting " +"contractAddress " + contractAddress +"quantity " + quantity +"account address " + account.address +"name " + name +"description " + description +"uri " + uri +"abi " + abi)
 
     try {
 
@@ -118,7 +115,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
 
       // Optionally, you can wait for the transaction receipt if needed
       console.log("Transaction sent, hash:", hash);
-      setOpenSucccessModal(true)
+      showMintResult(name, quantity, null)
       setUri(null);
       setQuantity(1);
       setBase64Image("");
@@ -147,25 +144,78 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
     }
   }
 
+
+
+
+
+
+  const submitSell = async (price: number, quantity: number, uri: string
+    , name: string, description: string, symbol: string, tokenId: string) => {
+    if (!uri) {
+      console.error("No URI set");
+      return;
+    }
+
+    if (!account) {
+      console.error("No account connected");
+      return;
+    }
+
+    try {
+      const valueInWei = BigInt(Math.floor(price * 10 ** 18));
+
+      const { request } = await simulateContract(config, {
+        abi,
+        address: contractAddress,
+        functionName: "sellNFT",
+        args: [name, symbol, BigInt(tokenId), description, uri, BigInt(quantity), valueInWei],
+      });
+
+      // Proceed to write the contract if simulation succeeded
+      console.log("Simulation succeeded, proceeding with transaction.");
+      const hash = await writeContract(config, request);
+
+      // Optionally, you can wait for the transaction receipt if needed
+      console.log("Transaction sent, hash:", hash);
+      showMintResult(name, quantity, true)
+      setUri(null);
+      setQuantity(1);
+      setBase64Image("");
+      setName("");
+      setDescription("");
+      // Show success modal or notification if needed
+    } catch (error) {
+      console.error("Error writing contract:", error);
+    }
+  };
+
 // fix it
   const onSetSellNFT = async (price: number, name: string, description: string, quantity: number) => {
     console.log("on sell with " + " price: " + price + " name: " + name + " description: " + description + " quantity: " + quantity);
-    // setQuantity(quantity)
-    // setName(name)
-    // setDescription(description)
-    // setAlert({ type: "success", message: "Minted Successfully" })
-    // try {
-    //   await submit();
-    // } catch (e) {
-    //   console.error("Error in payment process:", e);
-    // }
+
+    if (!uri) {
+      console.error("No URI set");
+      return;
+    }
+
+    try {
+      await submitSell(price, 1, uri, name, description, "SSSB", "1");
+    } catch (e) {
+      console.error("Error in payment process:", e);
+    }
+  }
+
+  const showMintResult = async (name: string, quantity: number, isListed: boolean | null) => {
+
+    setMintResultName(name)
+    setMintResultQuantite(quantity)
+    setMintResultIsListed(isListed)
+    setOpenSucccessModal(true)
   }
 
 
-
-
   const [openModal, setOpenModal] = useState(true); // Manage the open state in the parent
-  const isShowSample = false;
+  const isShowSample = true;
   const setSampleBase64 = () => {
 
     // setOpenSucccessModal(true)
@@ -203,9 +253,10 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
           <LoadingModal text={loading} open={loading !== ''} />
           <ImageGenerator onUriSet={setUri} onBase64ImageSet={handleSetImage} setLoading={setOnLoading} />
           <MintResult
-            name={name}
-            number={quantity}
+            name={mintResultName}
+            number={mintResultQuantity}
             open={openSucccessModal}
+            isListed={mintResultIsListed}
             setOpen={setOpenSucccessModal}
           />
 
