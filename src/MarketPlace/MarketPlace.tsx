@@ -1,5 +1,5 @@
 // MarketPlace.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { simulateContract, writeContract } from "@wagmi/core";
 import { abi } from "../abi";
@@ -19,20 +19,9 @@ import LoadingModal from "../Modal/LoadingModal/LoadingModal";
 import "./MarketPlace.css";
 import { config } from "../MintApp/wagmi";
 import Collection from "./Collection/Collection";
+import BuyModal from "./BuyModal/BuyModal";
 
-
-
-import { useReadContract } from 'wagmi'
-
-type SellOfferType = {
-  count: number;
-  description: string;
-  name: string;
-  nftContract: string;
-  price: number;
-  seller: string;
-  uri: string;
-};
+import { useReadContract } from "wagmi";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -76,66 +65,66 @@ const MintContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
+type SellOfferType = {
+  count: number;
+  description: string;
+  name: string;
+  nftContract: string;
+  price: number;
+  seller: string;
+  uri: string;
+};
+
 export default function MarketPlace(props: { disableCustomTheme?: boolean }) {
   const account = useAccount();
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDREESS;
-  
+
   const [quantity, setQuantity] = useState<number>(1);
 
   const [openSucccessModal, setOpenSucccessModal] = useState(false); // Manage the open state in the parent
 
   const [loading, setOnLoading] = useState(""); // Manage the open state in the parent
 
+  const [offers, setOffers] = useState<SellOfferType[]>([]);
+  const result = useReadContract({
+    address: contractAddress,
+    abi: abi,
+    functionName: "getSellOffers",
+    args: [],
+  });
 
-  const fetchMarketPlaceData = async (): Promise<SellOfferType[]> => {
-    try {
-      const result = await useReadContract({
-        address: contractAddress,
-        abi: abi,
-        functionName: 'getSellOffers',
-        args: []
-      });
-  
-      const offers = result.data ?? [];
-  
-      return offers.map(offer => ({
-        count: Number(offer.count),
-        description: offer.description,
-        name: offer.name,
-        nftContract: offer.nftContract,
-        price: Number(offer.price),
-        seller: offer.seller,
-        uri: offer.uri,
-      }));
-    } catch (error) {
-      console.error("Error reading contract:", error);
-      return [];
-    }
+
+  const fetchMarketPlaceData = () => {
+    const offers = (result.data ?? []).map((offer) => ({
+      count: Number(offer.count),
+      description: offer.description,
+      name: offer.name,
+      nftContract: offer.nftContract,
+      price: Number(offer.price),
+      seller: offer.seller,
+      uri: offer.uri,
+    }));
+
+    setOffers(offers);
   };
 
-
-  const [offers, setOffers] = useState<SellOfferType[]>([]);
-
-  // fetchMarketPlaceData().then(offers => {
-  //   setOffers(offers);
-  // });
-
+  useEffect(() => {
+    if (result.data) {
+      fetchMarketPlaceData();
+    }
+  }, []); // Empty dependency array means this runs once when the component mounts
 
 
-  const [openModal, setOpenModal] = useState(true); // Manage the open state in the parent
-  const isShowSample = true;
-  var isLoadFirst = false; 
-const fetch = () => {
-  if (isLoadFirst == false) {
-    fetchMarketPlaceData().then(offers => {
-      setOffers(offers);
-    });
-    isLoadFirst = true
-  }
-  
-}
 
-fetch()
+  const buy = () => {};
+
+  const [openModal, setOpenModal] = useState(false); // Manage the open state in the parent
+  const [selectedItem, setSelectedItem] = useState<SellOfferType | null>(null);
+
+  const onBuyCollection = (item: SellOfferType) => {
+    setSelectedItem(item);
+    setOpenModal(true);
+  };
 
   return (
     <AppTheme {...props}>
@@ -164,6 +153,15 @@ fetch()
 
           <LoadingModal text={loading} open={loading !== ""} />
 
+          {selectedItem != null && (
+            <BuyModal
+              item={selectedItem} // Pass the selected item here
+              onBuyAction={buy}
+              open={openModal}
+              setOpen={setOpenModal}
+            />
+          )}
+
           {/* <MintResult
             name={name}
             number={quantity}
@@ -182,7 +180,11 @@ fetch()
           variant="outlined"
           sx={{ minWidth: 1400, maxWidth: 1400, minHeight: 0 }}
         >
-          <Collection items={offers} address={account.address} />
+          <Collection
+            items={offers}
+            address={account.address}
+            onBuyingItem={onBuyCollection}
+          />
         </Card>
       </MintContainer>
     </AppTheme>

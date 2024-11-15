@@ -8,8 +8,20 @@ import CardMedia from "@mui/material/CardMedia";
 import { Stack } from "@mui/material";
 import './Collection.css'
 
+type SellOfferType = {
+  count: number;
+  description: string;
+  name: string;
+  nftContract: string;
+  price: number;
+  seller: string;
+  uri: string;
+};
+
 interface CollectionProps {
-  items: {
+  items: SellOfferType[]; // Define the shape of the items prop
+  address: string | undefined
+  onBuyingItem: ( items: {
     count: number;
     description: string;
     name: string;
@@ -17,11 +29,10 @@ interface CollectionProps {
     price: number;
     seller: string;
     uri: string;
-  }[]; // Define the shape of the items prop
-  address: string | undefined
+  }) => void
 }
 
-const Collection = ({ items, address }: CollectionProps) => {
+const Collection = ({ items, address, onBuyingItem }: CollectionProps) => {
 
 
   return (
@@ -59,7 +70,8 @@ const Collection = ({ items, address }: CollectionProps) => {
                 variant="contained"
                 color="success"
                 sx={{ height: 40, width: "100%" }}
-                disabled={ item.seller == address || address === undefined ? true : false}
+                disabled={ address === undefined ? true : false}//item.seller == address || 
+                onClick={() => onBuyingItem(item)}
               >
                 Buy
               </Button>
