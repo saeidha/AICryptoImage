@@ -96,7 +96,7 @@ export default function SellModal({ item, onBuyAction, open, setOpen }: SellModa
             </div>
 
             <div className="sell-button-container">
-              <Button variant="contained"  onClick={submit}>
+              <Button variant="contained" color="secondary" onClick={submit}>
                 Proceed to buy
               </Button>
             </div>
