@@ -14,7 +14,7 @@ import MuiCard from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import AppTheme from "../theme/AppTheme";
-import DismissibleAlert from "../DismissibleAlert";
+// import DismissibleAlert from "../DismissibleAlert";
 import logo from "../images/logo-mini.svg";
 import { config } from "./wagmi";
 import MintResult from "../Modal/MintResult/MintResult";
@@ -67,14 +67,11 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
   // const { connectors, connect, status, error } = useConnect();
   // const { disconnect } = useDisconnect();
   // const { writeContract } = useWriteContract();
-  const [alert, setAlert] = useState<{ type: 'success' | 'info' | 'warning' | 'error'; message: string } | null>(null);
+  // const [alert, setAlert] = useState<{ type: 'success' | 'info' | 'warning' | 'error'; message: string } | null>(null);
 
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDREESS;
   const [uri, setUri] = useState<string | null>(null);
-  const [quantity, setQuantity] = useState<number>(1);
   const [base64Image, setBase64Image] = useState<string>('');
-  const [name, setName] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
 
   const [openSucccessModal, setOpenSucccessModal] = useState(false); // Manage the open state in the parent
   const [mintResultName, setMintResultName] = useState('');
@@ -85,17 +82,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
   const [loading, setOnLoading] = useState(''); // Manage the open state in the parent
 
 
-  async function submit() {
-
-    if (!uri) {
-      console.error("No URI set");
-      return;
-    }
-
-    if (!account.address) {
-      console.error("No account connected");
-      return;
-    }
+  async function submit(name: string, quantity: number, uri: string, description: string){
 
     console.log("Minting " +"contractAddress " + contractAddress +"quantity " + quantity +"account address " + account.address +"name " + name +"description " + description +"uri " + uri +"abi " + abi)
 
@@ -117,10 +104,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
       console.log("Transaction sent, hash:", hash);
       showMintResult(name, quantity, null)
       setUri(null);
-      setQuantity(1);
       setBase64Image("");
-      setName("");
-      setDescription("");
     } catch (error) {
       console.error("Error writing contract:", error);
     }
@@ -132,13 +116,22 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
   }
 
   const onSetQunatity = async (quantityy: number, name: string, description: string) => {
+
+
+    if (!uri) {
+      console.error("No URI set");
+      return;
+    }
+
+    if (!account.address) {
+      console.error("No account connected");
+      return;
+    }
+
     console.log("on mint processwith qunatity: "+ quantityy);
-    setQuantity(quantityy)
-    setName(name)
-    setDescription(description)
-    setAlert({ type: "success", message: "Minted Successfully" })
+    // setAlert({ type: "success", message: "Minted Successfully" })
     try {
-       await submit();
+       await submit(name, quantityy, uri, description);
     } catch (e) {
       console.error("Error in payment process:", e);
     }
@@ -180,10 +173,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
       console.log("Transaction sent, hash:", hash);
       showMintResult(name, quantity, true)
       setUri(null);
-      setQuantity(1);
       setBase64Image("");
-      setName("");
-      setDescription("");
       
       // Show success modal or notification if needed
     } catch (error) {
@@ -318,11 +308,11 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
 
         </Card>
 
-        {alert && (
+        {/* {alert && (
           <Stack sx={{ width: "90%", alignItems: "center", bottom: "20" }} spacing={2}>
-            <DismissibleAlert type={alert.type} message={alert.message} />
+             <DismissibleAlert type={alert.type} message={alert.message} />
           </Stack>
-        )}
+        )} */}
       </MintContainer>
     </AppTheme>
   );
