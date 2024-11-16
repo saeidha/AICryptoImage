@@ -68,7 +68,7 @@ const Collection = ({ items, address, onBuyingItem }: CollectionProps) => {
                 variant="contained"
                 color="success"
                 sx={{ height: 40, width: "100%" }}
-                disabled={ address === undefined ? true : false}//item.seller == address || 
+                disabled={ item.seller == address || address === undefined ? true : false}
                 onClick={() => onBuyingItem(item)}
               >
                 Buy

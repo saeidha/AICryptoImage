@@ -193,8 +193,8 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
 
 
 // fix it
-  const onSetSellNFT = async (price: number, name: string, description: string, quantity: number) => {
-    console.log("on sell with " + " price: " + price + " name: " + name + " description: " + description + " quantity: " + quantity);
+  const onSetSellNFT = async (price: number, name: string, description: string) => {
+    console.log("on sell with " + " price: " + price + " name: " + name + " description: " + description);
 
     if (!uri) {
       console.error("No URI set");

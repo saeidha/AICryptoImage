@@ -24,7 +24,7 @@ const style = {
 interface NestedModalProps {
   base64Image: string;
   onSetMint: (quantity: number, name: string, description: string) => void;
-  onSetSell: (price: number, name: string, description: string, quantity: number) => void;
+  onSetSell: (price: number, name: string, description: string) => void;
   open: boolean; // Accept open state as a prop
   setOpen: React.Dispatch<React.SetStateAction<boolean>>; // Accept setOpen as a prop
 }
@@ -43,8 +43,8 @@ export default function NestedModal({ base64Image, onSetMint, onSetSell, open, s
     handleClose();
   };
 
-  const onSetSellParams = (price: number, name: string, description: string, quantity: number) => {
-    onSetSell(price, name, description, quantity);
+  const onSetSellParams = (price: number, name: string, description: string) => {
+    onSetSell(price, name, description);
     handleClose();
   };
 
