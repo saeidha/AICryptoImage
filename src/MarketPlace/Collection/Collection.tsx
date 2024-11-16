@@ -39,7 +39,7 @@ const Collection = ({ items, address, onBuyingItem }: CollectionProps) => {
         <Grid item xs={14} sm={3} md={3} key={index}>
           <Card>
             <CardMedia
-              sx={{ height: 200 }}
+              sx={{ height: 200, objectFit: 'cover'  }}
               image={
                 import.meta.env.VITE_PAY_CONTRACT_ADDREESS_IPFS_CDN + item.uri
               }

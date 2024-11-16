@@ -187,13 +187,14 @@ export default function MarketPlace(props: { disableCustomTheme?: boolean }) {
       <TabBar />
       <CssBaseline enableColorScheme />
 
-      <MintContainer direction="column" justifyContent="space-between">
+      <MintContainer direction="column" justifyContent="space-between" alignItems="center" display="flex">
         <Stack
           sx={{
             paddingTop: "100px",
             paddingBottom: "50px",
             alignItems: "center",
           }}
+          spacing={5}
         >
           <p className="typed-text">NFT Market Place</p>
 
@@ -231,6 +232,21 @@ export default function MarketPlace(props: { disableCustomTheme?: boolean }) {
             <Button onClick={fetchMarketPlaceData}>Open modal</Button>
           )} */}
           {/*Sampllllleeee*/}
+
+          <Card
+          // variant="outlined"
+          sx={{ minWidth: 1400, maxWidth: 1400, display: 'flex'}}
+        >
+
+
+          <div style={{ width: '100%' , display: 'flex'}}>
+          <Collection
+            items={offers}
+            address={account.address}
+            onBuyingItem={onBuyCollection}
+          />
+          </div>
+          </Card>
         </Stack>
 
         <MintResult
@@ -240,16 +256,9 @@ export default function MarketPlace(props: { disableCustomTheme?: boolean }) {
             isListed={mintResultIsListed}
             setOpen={setOpenSucccessModal}
           />
-        <Card
-          variant="outlined"
-          sx={{ minWidth: 1400, maxWidth: 1400, minHeight: 0 }}
-        >
-          <Collection
-            items={offers}
-            address={account.address}
-            onBuyingItem={onBuyCollection}
-          />
-        </Card>
+      
+          
+       
       </MintContainer>
     </AppTheme>
   );
