@@ -163,12 +163,13 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
 
     try {
       const valueInWei = BigInt(Math.floor(price * 10 ** 18));
+      console.log("valueInWei " + valueInWei)
 
       const { request } = await simulateContract(config, {
         abi,
         address: contractAddress,
         functionName: "sellNFT",
-        args: [name, symbol, description, uri, BigInt(quantity), valueInWei],
+        args: [name, symbol, description, uri, valueInWei],
       });
 
       // Proceed to write the contract if simulation succeeded
@@ -183,11 +184,13 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
       setBase64Image("");
       setName("");
       setDescription("");
+      
       // Show success modal or notification if needed
     } catch (error) {
       console.error("Error writing contract:", error);
     }
   };
+
 
 // fix it
   const onSetSellNFT = async (price: number, name: string, description: string, quantity: number) => {

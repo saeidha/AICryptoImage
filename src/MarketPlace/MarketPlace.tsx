@@ -1,21 +1,16 @@
 // MarketPlace.tsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { simulateContract, writeContract } from "@wagmi/core";
 import { abi } from "../abi";
 import TabBar from "../Tabbar/TabBar";
-import GeneratedModal from "../Modal/GeneratedModal/GeneratedModal";
 import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
-import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import AppTheme from "../theme/AppTheme";
-import DismissibleAlert from "../DismissibleAlert";
-import logo from "../images/logo-mini.svg";
 import MintResult from "../Modal/MintResult/MintResult";
-import LoadingModal from "../Modal/LoadingModal/LoadingModal";
+// import LoadingModal from "../Modal/LoadingModal/LoadingModal";
 import "./MarketPlace.css";
 import { config } from "../MintApp/wagmi";
 import Collection from "./Collection/Collection";
@@ -66,25 +61,23 @@ const MintContainer = styled(Stack)(({ theme }) => ({
 }));
 
 type SellOfferType = {
-  count: number;
   description: string;
   name: string;
-  nftContract: string;
+  symbol: string;
   price: number;
-  seller: string;
   uri: string;
+  seller: string;
 };
 
 export default function MarketPlace(props: { disableCustomTheme?: boolean }) {
   const account = useAccount();
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDREESS;
 
-  const [quantity, setQuantity] = useState<number>(1);
-
   const [openSucccessModal, setOpenSucccessModal] = useState(false); // Manage the open state in the parent
 
-  const [loading, setOnLoading] = useState(""); // Manage the open state in the parent
-
+  const [mintResultName, setMintResultName] = useState('');
+  const [mintResultQuantity, setMintResultQuantite] = useState(1);
+  const [mintResultIsListed, setMintResultIsListed] = useState<boolean | null>(null);
   const [offers, setOffers] = useState<SellOfferType[]>([]);
   const result = useReadContract({
     address: contractAddress,
@@ -96,10 +89,9 @@ export default function MarketPlace(props: { disableCustomTheme?: boolean }) {
 
   const fetchMarketPlaceData = () => {
     const offers = (result.data ?? []).map((offer) => ({
-      count: Number(offer.count),
       description: offer.description,
       name: offer.name,
-      nftContract: offer.nftContract,
+      symbol: offer.symbol,
       price: Number(offer.price),
       seller: offer.seller,
       uri: offer.uri,
@@ -110,17 +102,70 @@ export default function MarketPlace(props: { disableCustomTheme?: boolean }) {
 
   useEffect(() => {
     if (result.data) {
+      console.log(result.data);
       fetchMarketPlaceData();
     }
   }, []); // Empty dependency array means this runs once when the component mounts
 
 
 
-  const buy = () => {};
+  const buy = async () => {
+
+
+    if (!account.address){
+      console.error("No account connected");
+      return;
+    }
+
+    if (selectedItem!= null){
+      
+      try{ 
+        await proceedToPay(selectedItem)
+      }catch (e) {
+        console.error("Error in payment process:", e);
+      }
+    }
+  };
+
+  const proceedToPay = async (item: SellOfferType) => {
+
+    try {
+      // Simulate the contract call to check if it will succeed
+      const { request } = await simulateContract(config, {
+        abi,
+        address: contractAddress,
+        functionName: "buyNFT",
+        args: [ item.uri, item.name, item.description], // Add any necessary arguments for the 'pay' function here
+        value: BigInt(item.price),
+      });
+
+      // Proceed to write the contract if simulation succeeded
+      console.log("Simulation succeeded, proceeding with transaction.");
+
+      const hash = await writeContract(config, request);
+
+      // Optionally, you can wait for the transaction receipt if needed
+      console.log("Transaction sent, hash:", hash);
+      showMintResult(item.name, 1, null)
+  
+      // setIsPay(true);
+    } catch (error) {
+      console.error("Error writing contract:", error);
+      // setError("Transaction failed");
+    }
+  };
 
   const [openModal, setOpenModal] = useState(false); // Manage the open state in the parent
   const [selectedItem, setSelectedItem] = useState<SellOfferType | null>(null);
 
+  const showMintResult = async (name: string, quantity: number, isListed: boolean | null) => {
+
+    setMintResultName(name)
+    setMintResultQuantite(quantity)
+    setMintResultIsListed(isListed)
+    setOpenSucccessModal(true)
+  }
+  
   const onBuyCollection = (item: SellOfferType) => {
     setSelectedItem(item);
     setOpenModal(true);
@@ -151,7 +196,7 @@ export default function MarketPlace(props: { disableCustomTheme?: boolean }) {
             />
           )} */}
 
-          <LoadingModal text={loading} open={loading !== ""} />
+          {/* <LoadingModal text={loading} open={loading !== ""} /> */}
 
           {selectedItem != null && (
             <BuyModal
@@ -176,6 +221,14 @@ export default function MarketPlace(props: { disableCustomTheme?: boolean }) {
           )} */}
           {/*Sampllllleeee*/}
         </Stack>
+
+        <MintResult
+            name={mintResultName}
+            number={mintResultQuantity}
+            open={openSucccessModal}
+            isListed={mintResultIsListed}
+            setOpen={setOpenSucccessModal}
+          />
         <Card
           variant="outlined"
           sx={{ minWidth: 1400, maxWidth: 1400, minHeight: 0 }}

@@ -9,26 +9,24 @@ import { Stack } from "@mui/material";
 import './Collection.css'
 
 type SellOfferType = {
-  count: number;
   description: string;
   name: string;
-  nftContract: string;
+  symbol: string;
   price: number;
-  seller: string;
   uri: string;
+  seller: string;
 };
 
 interface CollectionProps {
   items: SellOfferType[]; // Define the shape of the items prop
   address: string | undefined
   onBuyingItem: ( items: {
-    count: number;
     description: string;
     name: string;
-    nftContract: string;
+    symbol: string;
     price: number;
-    seller: string;
     uri: string;
+    seller: string;
   }) => void
 }
 

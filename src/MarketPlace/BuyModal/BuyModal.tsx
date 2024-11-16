@@ -23,13 +23,12 @@ const style = {
 
 interface SellModalProps {
   item: {
-    count: number;
     description: string;
     name: string;
-    nftContract: string;
+    symbol: string;
     price: number;
-    seller: string;
     uri: string;
+    seller: string;
   };
   onBuyAction: () => void;
   open: boolean; // Accept open state as a prop

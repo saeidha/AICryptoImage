@@ -23,17 +23,17 @@ const style = {
 
 interface SellModalProps {
   base64Image: string;
-  onSetedSell: (price: number, name: string, description: string, quantity: number) => void;
+  onSetedSell: (price: number, name: string, description: string) => void;
 }
 
 export default function SellModal({ base64Image, onSetedSell }: SellModalProps) {
   const [open, setOpen] = React.useState(false);
   const [error, setError] = React.useState(false);
-  const [errorQuantity, setErrorQuantity] = React.useState(false);
+  // const [errorQuantity, setErrorQuantity] = React.useState(false);
   const [price, setPrice] = React.useState(0.00001);
   const [name, setName] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
-  const [quantity, setQuantity] = React.useState<number>(1);
+  // const [quantity, setQuantity] = React.useState<number>(1);
   const defVlaue = Number(0.00001);
 
   const handleOpen = () => {
@@ -44,8 +44,8 @@ export default function SellModal({ base64Image, onSetedSell }: SellModalProps) 
   };
 
   const submit = () => {
-    console.log("Sell NFT with price: " + price + " " + name + " " + description + " " + quantity)
-    onSetedSell(price, name, description, quantity);
+    console.log("Sell NFT with price: " + price + " " + name + " " + description + " " )
+    onSetedSell(price, name, description);
     handleClose();
   };
 
@@ -54,10 +54,10 @@ export default function SellModal({ base64Image, onSetedSell }: SellModalProps) 
     setError(value < defVlaue)
   }
 
-  const setInternalQuantity = (value: number) => {
-    setQuantity(value)
-    setErrorQuantity(value < 1 || value > 100)
-  }
+  // const setInternalQuantity = (value: number) => {
+  //   setQuantity(value)
+  //   setErrorQuantity(value < 1 || value > 100)
+  // }
 
   return (
     <div>
@@ -96,7 +96,7 @@ export default function SellModal({ base64Image, onSetedSell }: SellModalProps) 
               />
             </Stack>
 
-            <Stack spacing={2} >
+            {/* <Stack spacing={2} >
 
             <TextField
                   error={errorQuantity}
@@ -108,7 +108,7 @@ export default function SellModal({ base64Image, onSetedSell }: SellModalProps) 
                   onChange={(e) => setInternalQuantity(Number(e.target.value))}
                   />
 {errorQuantity && (<p className='error'>Quantity can not be less than 1 and more than 100</p>)}
-</Stack>
+</Stack> */}
 
             
 
