@@ -9,6 +9,7 @@ import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import AppTheme from "../theme/AppTheme";
 import Typography from "@mui/material/Typography";
+import roadmap from "../images/roadmap.png";
 
 const ParallaxContainer = styled(Stack)(({ theme }) => ({
   height: "calc((1 - var(--template-frame-height, 0)) * 100dvh)",
@@ -80,7 +81,11 @@ export default function ParallaxComponent(props: {
             </div>
           </ParallaxLayer>
 
-          <ParallaxLayer offset={1} speed={1}></ParallaxLayer>
+          <ParallaxLayer offset={1} speed={1}>
+          <div className="roadmap">
+              <img src={roadmap} alt="roadmap" />
+            </div>
+          </ParallaxLayer>
         </Parallax>
       </ParallaxContainer>
     </AppTheme>

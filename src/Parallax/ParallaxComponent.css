@@ -61,3 +61,16 @@
     border-radius: 5px;
     width: 180px;
   }
+
+  .roadmap {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically if needed */
+    /* height: 50vh; */
+    /* padding-top: 5%; */
+  }
+
+  .roadmap img {
+    max-width: 100%; /* Make sure the logo is responsive */
+    height: auto; /* Maintain aspect ratio */
+  }
