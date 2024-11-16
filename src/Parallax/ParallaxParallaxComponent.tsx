@@ -59,7 +59,7 @@ export default function ParallaxComponent(props: {
                 </Typography>
 
                 <ReactTyped
-                  strings={["Welcome to the AI NFT Generator On Chain Dapp"]}
+                  strings={["Welcome to the AI NFT Generator On Linea Dapp"]}
                   typeSpeed={50}
                   backSpeed={80}
                   loop

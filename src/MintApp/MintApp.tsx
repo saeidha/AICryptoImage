@@ -241,7 +241,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
             variant="h4"
             sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
           >
-            AI NFT Generator
+            AI Seed NFT Generator
           </Typography>
 
           {base64Image !== '' && (
