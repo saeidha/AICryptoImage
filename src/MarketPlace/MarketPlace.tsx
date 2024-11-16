@@ -79,6 +79,8 @@ export default function MarketPlace(props: { disableCustomTheme?: boolean }) {
   const [mintResultQuantity, setMintResultQuantite] = useState(1);
   const [mintResultIsListed, setMintResultIsListed] = useState<boolean | null>(null);
   const [offers, setOffers] = useState<SellOfferType[]>([]);
+  const [refreshTrigger, setRefreshTrigger] = useState(0); // State to trigger refresh
+
   const result = useReadContract({
     address: contractAddress,
     abi: abi,
@@ -101,12 +103,21 @@ export default function MarketPlace(props: { disableCustomTheme?: boolean }) {
   };
 
   useEffect(() => {
-    if (result.data) {
-      console.log(result.data);
-      fetchMarketPlaceData();
-    }
-  }, []); // Empty dependency array means this runs once when the component mounts
+    fetchMarketPlaceData(); // Call it when result changes
+  }, [result]);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setRefreshTrigger((prev) => prev + 1); // Trigger a re-fetch every second
+    }, 1000);
+
+    return () => clearInterval(intervalId); // Cleanup interval on unmount
+  }, []);
+
+  // Call the fetch function whenever refreshTrigger changes
+  useEffect(() => {
+    fetchMarketPlaceData();
+  }, [refreshTrigger]);
 
 
   const buy = async () => {

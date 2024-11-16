@@ -1,45 +1,46 @@
 // ImageGenerator.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import UploadToIPFS from "./UploadToIPFS";
 import PromptForm from "./Promp";
-import { useProceedToPay } from "./Pay/ProceedToPay";
+import { useAccount } from "wagmi";
+// import { useProceedToPay } from "./Pay/ProceedToPay";
 
 interface ImageGeneratorProps {
-  onUriSet: (uri: string) => void;
-  onBase64ImageSet: (image: string) => void;
+  onUriImageSet: (uri: string, image: string) => void;
   setLoading: (loading: string) => void;
 }
 
-const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet, onBase64ImageSet, setLoading }) => {
+const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriImageSet, setLoading }) => {
   const [prompt, setPrompt] = useState<string>("");
   const [base64Image, setBase64Image] = useState<string | null>(null);
+  const { address } = useAccount();
 
   /// Pay result
-  const { proceedToPay, isPay, errorr } = useProceedToPay();
+  // const { proceedToPay, isPay, errorr } = useProceedToPay();
   const [error, setError] = useState<string | null>(null);
-  useEffect(() => {
-    const handlePaymentSuccess = async () => {
-      if (isPay) {
-        console.log("Payment was successful!");
-        // Call the generateImage function if payment was successful
-        try {
-          await generateImage();
-          setPrompt("");
-        } catch (error) {
-          console.error("Error generating image:", error);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const handlePaymentSuccess = async () => {
+  //     if (isPay) {
+  //       console.log("Payment was successful!");
+  //       // Call the generateImage function if payment was successful
+  //       try {
+  //         await generateImage();
+  //         setPrompt("");
+  //       } catch (error) {
+  //         console.error("Error generating image:", error);
+  //       }
+  //     }
+  //   };
 
-    handlePaymentSuccess();
-  }, [isPay]);
-  useEffect(() => {
-    if (error) {
-      console.error("There was an error with the payment:", error);
-      // Additional actions on error, e.g., display a notification
-      setError(error);
-    }
-  }, [errorr]);
+  //   handlePaymentSuccess();
+  // }, [isPay]);
+  // useEffect(() => {
+  //   if (error) {
+  //     console.error("There was an error with the payment:", error);
+  //     // Additional actions on error, e.g., display a notification
+  //     setError(error);
+  //   }
+  // }, [errorr]);
 
   const generateImage = async () => {
     setLoading('Generating...');
@@ -65,7 +66,8 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet, onBase64Image
         reader.onloadend = () => {
           const res = reader.result as string
           setBase64Image(res);
-          onBase64ImageSet(res);
+          setPrompt("");
+          // onBase64ImageSet(res);
         };
         reader.readAsDataURL(blob);
       } else {
@@ -81,16 +83,21 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onUriSet, onBase64Image
 
 
   const handleSubmit = async () => {
+    if (!address) {
+      console.error("No account connected");
+      // setError("No account connected");
+      return;
+    }
     console.log("Start payment process");
     try {
-      await proceedToPay();
+      await generateImage();
     } catch (e) {
       console.error("Error in payment process:", e);
     }
   };
 
   const onUriSetDone = (uri: string) => {
-    onUriSet(uri)
+    onUriImageSet(uri, base64Image || "");
     setLoading('')
   };
 

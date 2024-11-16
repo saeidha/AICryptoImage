@@ -111,8 +111,9 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
 
   }
 
-  const handleSetImage = (image: string) => {
-    setBase64Image(image)
+  const handleSetImage = (uri: string, image: string) => {
+    setBase64Image(image);
+    setUri(uri);
   }
 
   const onSetQunatity = async (quantityy: number, name: string, description: string) => {
@@ -244,7 +245,7 @@ export default function MintApp(props: { disableCustomTheme?: boolean }) {
           )}
 
           <LoadingModal text={loading} open={loading !== ''} />
-          <ImageGenerator onUriSet={setUri} onBase64ImageSet={handleSetImage} setLoading={setOnLoading} />
+          <ImageGenerator onUriImageSet={handleSetImage} setLoading={setOnLoading} />
           <MintResult
             name={mintResultName}
             number={mintResultQuantity}

@@ -4,7 +4,7 @@
 // import { config } from "../wagmi";
 import { useState } from 'react';
 
-export const useProceedToPay = () => {
+export const useProceedToPay = (onSuccess?: () => void) => {
    const { address } = useAccount();
   const [isPay, setIsPay] = useState<boolean>(false);
   const errorr = null;
@@ -17,7 +17,11 @@ export const useProceedToPay = () => {
       // setError("No account connected");
       return;
     }
+    console.log("payed");
     setIsPay(true);
+    if (onSuccess) {
+      onSuccess();
+    }
     // const valueInWei = BigInt(Math.floor(0.00007 * 10 ** 18)); // Convert 0.0007 ETH to Wei
 
     // try {
