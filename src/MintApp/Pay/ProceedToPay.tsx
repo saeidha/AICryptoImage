@@ -1,23 +1,23 @@
-// import { useAccount } from "wagmi";
+ import { useAccount } from "wagmi";
 // import { simulateContract, writeContract } from "@wagmi/core";
 // import { abi } from "./generateImageAbi";
 // import { config } from "../wagmi";
 import { useState } from 'react';
 
 export const useProceedToPay = () => {
-  // const { address } = useAccount();
+   const { address } = useAccount();
   const [isPay, setIsPay] = useState<boolean>(false);
   const errorr = null;
   // const [errorr, setError] = useState<string | null>(null);
 
   const proceedToPay = async () => {
+    
+    if (!address) {
+      console.error("No account connected");
+      // setError("No account connected");
+      return;
+    }
     setIsPay(true);
-    // if (!address) {
-    //   console.error("No account connected");
-    //   setError("No account connected");
-    //   return;
-    // }
-
     // const valueInWei = BigInt(Math.floor(0.00007 * 10 ** 18)); // Convert 0.0007 ETH to Wei
 
     // try {
