@@ -1,43 +1,16 @@
-// MintApp.tsx
-import { useState } from "react";
-import { useAccount } from "wagmi";
-import { simulateContract, writeContract } from "@wagmi/core";
-import { abi } from "../abi";
-import TabBar from "../Tabbar/TabBar";
-import "./ChatBotApp.css";
-import GeneratedModal from "../Modal/GeneratedModal/GeneratedModal";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
-import MuiCard from "@mui/material/Card";
-import Button from "@mui/material/Button";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
+import { TextField, Button, Stack, Typography, Box } from "@mui/material";
+import TabBar from "../Tabbar/TabBar";
 import AppTheme from "../theme/AppTheme";
-// import DismissibleAlert from "../DismissibleAlert";
-import logo from "../images/logo-mini.svg";
-import MintResult from "../Modal/MintResult/MintResult";
-import LoadingModal from "../Modal/LoadingModal/LoadingModal"
+import CssBaseline from "@mui/material/CssBaseline";
 
-const Card = styled(MuiCard)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  alignSelf: "center",
-  width: "100%",
-  padding: theme.spacing(4),
-  gap: theme.spacing(2),
-  margin: "auto",
-  [theme.breakpoints.up("sm")]: {
-    maxWidth: "450px",
-  },
-  boxShadow:
-    "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
-  ...theme.applyStyles("dark", {
-    boxShadow:
-      "hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px",
-  }),
-}));
-
-const MintContainer = styled(Stack)(({ theme }) => ({
+// Define the type for chat messages
+interface Message {
+  text: string;
+  isUser:  boolean; // Change this to isUser 
+}
+const ChatContainer = styled(Stack)(({ theme }) => ({
   height: "calc((1 - var(--template-frame-height, 0)) * 100dvh)",
   minHeight: "100%",
   padding: theme.spacing(2),
@@ -60,27 +33,81 @@ const MintContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
+// const ChatContainer = styled(Box)(({ theme }) => ({
+//   display: "flex",
+//   flexDirection: "column",
+//   height: "100%",
+//   padding: theme.spacing(2),
+//   overflowY: "auto",
+// }));
+
+const MessageBubble = styled(Box)(({ isUser  }: { isUser:  boolean }) => ({
+  alignSelf: isUser  ? "flex-end" : "flex-start",
+  backgroundColor: isUser  ? "#007bff" : "#e0e0e0",
+  color: isUser  ? "white" : "black",
+  borderRadius: "20px",
+  padding: "10px 15px",
+  margin: "5px 0",
+  maxWidth: "70%",
+}));
+
 export default function ChatBotApp(props: { disableCustomTheme?: boolean }) {
-  const account = useAccount();
-  // const { connectors, connect, status, error } = useConnect();
-  // const { disconnect } = useDisconnect();
-  // const { writeContract } = useWriteContract();
-  // const [alert, setAlert] = useState<{ type: 'success' | 'info' | 'warning' | 'error'; message: string } | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]); // Use the Message type
+  const [inputValue, setInputValue] = useState("");
 
-  const contractAddress = import.meta.env.VITE_CONTRACT_ADDREESS;
-  const [uri, setUri] = useState<string | null>(null);
-  const [base64Image, setBase64Image] = useState<string>('');
+  const handleSendMessage = async () => {
+    if (!inputValue.trim()) return;
 
-  const [openSucccessModal, setOpenSucccessModal] = useState(false); // Manage the open state in the parent
-  const [mintResultName, setMintResultName] = useState('');
-  const [mintResultQuantity, setMintResultQuantite] = useState(1);
-  const [mintResultIsListed, setMintResultIsListed] = useState<boolean | null>(null);
+    // Add user message to chat
+    setMessages((prev) => [...prev, { text: inputValue, isUser:  true }]);
 
+    // Call the API
+try {
+  const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBfGdw10fZpE-P-3Zg5KMXBoz5HpNXvpyM", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: inputValue }] }],
+    }),
+  });
+
+  const data = await response.json();
+  const botMessage = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I didn't understand that.";
+
+  // Add bot response to chat
+  setMessages((prev) => [...prev, { text: botMessage, isUser: false }]);
+} catch (error) {
+  console.error("Error fetching bot response:", error);
+  setMessages((prev) => [...prev, { text: "Sorry, there was an error processing your request.", isUser: false }]);
+}
+    setInputValue(""); // Clear input field
+  };
 
   return (
     <AppTheme {...props}>
       <TabBar />
       <CssBaseline enableColorScheme />
+      <ChatContainer>
+        {messages.map((msg, index) => (
+          <MessageBubble key={index} isUser ={msg.isUser }>
+            <Typography variant="body1">{msg.text}</Typography>
+          </MessageBubble>
+        ))}
+        <Stack direction="row" spacing={1} sx={{ marginTop: "auto" }}>
+          <TextField
+            variant="outlined"
+            fullWidth
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Type your message..."
+          />
+          <Button variant="contained" onClick={handleSendMessage}>
+            Send
+          </Button>
+        </Stack>
+      </ChatContainer>
     </AppTheme>
   );
 }
