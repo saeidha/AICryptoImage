@@ -4,6 +4,7 @@ import ParallaxComponent from './Parallax/ParallaxParallaxComponent';
 import MintApp from './MintApp/MintApp'; // Import the LaunchApp component
 import { StyledEngineProvider } from '@mui/material/styles';
 import MarketPlace from './MarketPlace/MarketPlace';
+import ChatBotApp from './ChatBot/ChatBotApp';
 
 
 const App: React.FC = () => {
@@ -16,6 +17,7 @@ const App: React.FC = () => {
                     <Route path="/" element={<ParallaxComponent />} />
                     <Route path="/mint" element={<MintApp />} />
                     <Route path="/marketPlace" element={<MarketPlace />} />
+                    <Route path="/chatBot" element={<ChatBotApp />} />
                 </Routes>
                 </StyledEngineProvider>
             </div>

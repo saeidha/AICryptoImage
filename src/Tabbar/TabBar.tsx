@@ -25,6 +25,9 @@ const TabBar: React.FC = () => {
             <Link to="/mint" style={{ textDecoration: "none", color: "black" }}>
             <div className="nav-text">Mint App</div>
             </Link>
+            <Link to="/chatBot" style={{ textDecoration: "none", color: "black" }}>
+            <div className="nav-text">ChatBot App</div>
+            </Link>
             <Link to="/marketPlace" style={{ textDecoration: "none", color: "black" }}>
             <div className="nav-text">Market Place</div>
             </Link>
