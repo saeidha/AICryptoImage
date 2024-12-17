@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import { TextField, Button, Stack, Typography, Box } from "@mui/material";
 import TabBar from "../Tabbar/TabBar";
@@ -54,13 +54,26 @@ const MessageBubble = styled(Box)(({ isUser  }: { isUser:  boolean }) => ({
 export default function ChatBotApp(props: { disableCustomTheme?: boolean }) {
   const [messages, setMessages] = useState<Message[]>([]); // Use the Message type
   const [inputValue, setInputValue] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    const typingTimeout = setTimeout(() => {
+        if (inputValue) {
+            setIsTyping(true);
+        } else {
+            setIsTyping(false);
+        }
+    }, 1); // Show typing indicator after 300ms of typing
+
+    return () => clearTimeout(typingTimeout);
+}, [inputValue]);
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 
     // Add user message to chat
     setMessages((prev) => [...prev, { text: inputValue, isUser:  true }]);
-
+    setIsTyping(false);
     // Call the API
 try {
   const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBfGdw10fZpE-P-3Zg5KMXBoz5HpNXvpyM", {
@@ -92,16 +105,30 @@ try {
       <ChatContainer>
         {messages.map((msg, index) => (
           <MessageBubble key={index} isUser ={msg.isUser }>
+            {isTyping && (
+                    <div className="typing-indicator">
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                        <div className="dot"></div>
+                    </div>
+                )}
             <Typography variant="body1">{msg.text}</Typography>
           </MessageBubble>
         ))}
+        
         <Stack direction="row" spacing={1} sx={{ marginTop: "auto" }}>
           <TextField
             variant="outlined"
             fullWidth
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Type your message..."
+            placeholder="Type your prompt..."
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault(); // Prevent the default action (like a form submission)
+                handleSendMessage(); // Call the send message function
+              }
+            }}
           />
           <Button variant="contained" onClick={handleSendMessage}>
             Send
