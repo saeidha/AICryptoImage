@@ -56,11 +56,11 @@ export default function ParallaxComponent(props: {
                   variant="h4"
                   sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
                 >
-                  Build on Linea for Linea
+                  Build on opBNB for BNB
                 </Typography>
 
                 <ReactTyped
-                  strings={["Welcome to the AI NFT Generator On Linea Dapp"]}
+                  strings={["Welcome to the AI NFT Generator On opBNB Dapp"]}
                   typeSpeed={50}
                   backSpeed={80}
                   loop
